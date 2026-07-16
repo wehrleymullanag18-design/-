@@ -29,7 +29,7 @@ window.METAPANEL_CONFIG = {
 
 ## 运行要求
 
-网站使用 ES Modules，公开部署后可直接运行。离线场景需把 Three.js、Tween.js 和 Draco 解码器下载到本地并修改 import map。
+网站使用 ES Modules，Three.js、Tween.js、GLB/Draco 加载器及 Draco 解码器均已固定版本并随仓库发布，不再依赖第三方运行时 CDN。公开部署后可直接运行。
 
 ## 浏览器与性能
 
@@ -37,4 +37,3 @@ window.METAPANEL_CONFIG = {
 - 低核心数、低内存或小屏设备自动降低像素比并关闭阴影
 - 遵循 `prefers-reduced-motion`
 - 外部 GLB 加载失败时保留程序化模型
-

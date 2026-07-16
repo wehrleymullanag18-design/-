@@ -548,9 +548,9 @@
   <script type="importmap">
     {
       "imports": {
-        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
-        "@tweenjs/tween.js": "https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@23.1.2/dist/tween.esm.js"
+        "three": "./vendor/three/three.module.js",
+        "three/addons/": "./vendor/three/addons/",
+        "@tweenjs/tween.js": "./vendor/tween/tween.esm.js"
       }
     }
   </script>
@@ -809,7 +809,7 @@
       const url = window.METAPANEL_CONFIG && window.METAPANEL_CONFIG.aircraftModelUrl;
       if (!url) return;
       const draco = new DRACOLoader();
-      draco.setDecoderPath("https://unpkg.com/three@0.160.0/examples/jsm/libs/draco/");
+      draco.setDecoderPath("./vendor/draco/");
       const loader = new GLTFLoader();
       loader.setDRACOLoader(draco);
       loader.load(url, (gltf) => {

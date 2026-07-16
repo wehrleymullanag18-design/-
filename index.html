@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>METAPANEL AERO｜航空超材料减震壁板数字孪生</title>
-  <meta name="description" content="面向民用航空器的超材料减震壁板沉浸式 3D 产品展示与数字孪生原型。" />
+  <title>METAPANEL AERO??????????????</title>
+  <meta name="description" content="?????????????????? 3D ????????????" />
   <meta name="theme-color" content="#030712" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23030712'/%3E%3Cpath d='M12 42 30 13l4 18 18-9-20 29-4-18z' fill='%2338bdf8'/%3E%3C/svg%3E" />
   <style>
@@ -313,7 +313,7 @@
     body.presentation #performancePanel:hover { opacity: 1; transform: translateX(0); }
     #performancePanel { transition: opacity .3s ease, transform .3s ease; }
 
-    /* 沉浸式滚动叙事层 */
+    /* ???????? */
     html { scroll-behavior: smooth; }
     html, body { height: auto; min-height: 100%; overflow-x: hidden; overflow-y: auto; background: #030712; }
     #sceneContainer { position: fixed; inset: 0; z-index: 0; }
@@ -409,139 +409,139 @@
 <body>
   <div id="loader"><div class="loader-core"><div class="loader-mark">METAPANEL AERO</div><div class="loader-track"><i></i></div><small>INITIALIZING DIGITAL TWIN</small></div></div>
   <nav id="topNav">
-    <h1>METAPANEL AERO<small>航空超材料减震系统 · DIGITAL TWIN</small></h1>
+    <h1>METAPANEL AERO<small>????????? ? DIGITAL TWIN</small></h1>
     <div id="navLinks">
-      <a href="#hero">概览</a><a href="#aircraft">整机</a><a href="#installation">安装</a><a href="#explosion">结构</a><a href="#principle">原理</a><a href="#comparison">对比</a><a href="#flight">工况</a><a href="#contact">合作</a>
+      <a href="#hero">??</a><a href="#aircraft">??</a><a href="#installation">??</a><a href="#explosion">??</a><a href="#principle">??</a><a href="#comparison">??</a><a href="#flight">??</a><a href="#contact">??</a>
     </div>
-    <div id="navStatus">系统待命</div>
+    <div id="navStatus">????</div>
   </nav>
   <div id="sceneContainer"></div>
   <div id="leftControls">
-    <button id="splitButton" class="controlButton">拆分后机身</button>
-    <button id="resetButton" class="controlButton">复位机身</button>
-    <button id="explodeButton" class="controlButton secondary">壁板爆炸图</button>
-    <button id="implodeButton" class="controlButton secondary">收拢壁板</button>
-    <button id="showcaseButton" class="controlButton showcase">自动演示</button>
-    <button id="explosionViewButton" class="controlButton secondary">爆炸全景</button>
-    <button id="overviewButton" class="controlButton">整体视角</button>
-    <button id="rearViewButton" class="controlButton">后段特写</button>
-    <button id="insideViewButton" class="controlButton">内部视角</button>
-    <button id="orbitButton" class="controlButton utility">环绕巡检</button>
-    <button id="xrayButton" class="controlButton utility">机身透视</button>
-    <button id="fullscreenButton" class="controlButton utility">全屏演示</button>
+    <button id="splitButton" class="controlButton">?????</button>
+    <button id="resetButton" class="controlButton">????</button>
+    <button id="explodeButton" class="controlButton secondary">?????</button>
+    <button id="implodeButton" class="controlButton secondary">????</button>
+    <button id="showcaseButton" class="controlButton showcase">????</button>
+    <button id="explosionViewButton" class="controlButton secondary">????</button>
+    <button id="overviewButton" class="controlButton">????</button>
+    <button id="rearViewButton" class="controlButton">????</button>
+    <button id="insideViewButton" class="controlButton">????</button>
+    <button id="orbitButton" class="controlButton utility">????</button>
+    <button id="xrayButton" class="controlButton utility">????</button>
+    <button id="fullscreenButton" class="controlButton utility">????</button>
   </div>
   <aside id="performancePanel">
-    <div class="panelTitle">性能测试面板</div>
+    <div class="panelTitle">??????</div>
     <div class="panelSection">
-      <div class="labelRow"><span>工况选择</span></div>
+      <div class="labelRow"><span>????</span></div>
       <select id="conditionSelect">
-        <option value="85">巡航（外部 85dB）</option>
-        <option value="105">起飞（外部 105dB）</option>
-        <option value="95">降落（外部 95dB）</option>
+        <option value="85">????? 85dB?</option>
+        <option value="105">????? 105dB?</option>
+        <option value="95">????? 95dB?</option>
       </select>
     </div>
     <div class="panelSection">
       <div class="labelRow">
-        <span>减震壁板降噪系数</span>
+        <span>????????</span>
         <span id="reductionLabel">25 dB</span>
       </div>
       <input id="reductionSlider" type="range" min="15" max="35" value="25" step="1" />
     </div>
     <div class="panelSection dataGrid">
       <div class="metric">
-        <span class="metricLabel">机舱外部噪音</span>
+        <span class="metricLabel">??????</span>
         <span id="externalNoiseValue" class="metricValue">85 dB</span>
       </div>
       <div class="metric">
-        <span class="metricLabel">机舱内部噪音</span>
+        <span class="metricLabel">??????</span>
         <span id="internalNoiseValue" class="metricValue">60 dB</span>
       </div>
       <div class="metric">
-        <span class="metricLabel">降噪差值</span>
+        <span class="metricLabel">????</span>
         <span id="differenceValue" class="metricValue highlight">25 dB</span>
       </div>
       <div id="noDampingMetric" class="metric" style="display: none;">
-        <span class="metricLabel">无减震内部噪音</span>
+        <span class="metricLabel">???????</span>
         <span id="noDampingValue" class="metricValue">85 dB</span>
       </div>
     </div>
     <div class="panelSection">
       <label class="compareRow">
         <input id="compareCheckbox" type="checkbox" />
-        <span>显示无减震对比</span>
+        <span>???????</span>
       </label>
     </div>
     <div class="panelSection">
-      <div class="labelRow"><span>减震壁板材料参数</span></div>
-      <div id="materialInfo">拆分后点击淡蓝色减震壁板，可查看材料基础参数。</div>
+      <div class="labelRow"><span>????????</span></div>
+      <div id="materialInfo">???????????????????????</div>
       <div class="moduleStatus">
-        <div class="statusPill">机身状态<strong id="splitStateText">未拆分</strong></div>
-        <div class="statusPill">壁板状态<strong id="panelStateText">收拢</strong></div>
+        <div class="statusPill">????<strong id="splitStateText">???</strong></div>
+        <div class="statusPill">????<strong id="panelStateText">??</strong></div>
       </div>
     </div>
     <canvas id="noiseChart" width="560" height="320"></canvas>
   </aside>
   <div id="explosionLegend">
-    <div class="legendTitle">壁板爆炸图层级</div>
-    <div class="legendItem"><span class="legendSwatch" style="color:#63b3ed;background:#63b3ed;"></span>外侧隔声面板</div>
-    <div class="legendItem"><span class="legendSwatch" style="color:#f6ad55;background:#f6ad55;"></span>阻尼吸能芯层</div>
-    <div class="legendItem"><span class="legendSwatch" style="color:#c4f1f9;background:#c4f1f9;"></span>客舱内饰衬板</div>
+    <div class="legendTitle">???????</div>
+    <div class="legendItem"><span class="legendSwatch" style="color:#63b3ed;background:#63b3ed;"></span>??????</div>
+    <div class="legendItem"><span class="legendSwatch" style="color:#f6ad55;background:#f6ad55;"></span>??????</div>
+    <div class="legendItem"><span class="legendSwatch" style="color:#c4f1f9;background:#c4f1f9;"></span>??????</div>
   </div>
-  <div id="statusHint">拖拽旋转视角，滚轮缩放；拆分后可点击减震壁板</div>
-  <div id="viewBadge">整体构型 · OVERVIEW</div>
-  <button id="manualToggle" type="button">◫ 手动探索</button>
-  <nav id="chapterRail" aria-label="章节导航">
-    <a href="#hero" aria-label="开场"></a><a href="#value" aria-label="价值"></a><a href="#aircraft" aria-label="整机"></a><a href="#installation" aria-label="安装位置"></a><a href="#explosion" aria-label="爆炸图"></a><a href="#principle" aria-label="原理"></a><a href="#comparison" aria-label="对比"></a><a href="#flight" aria-label="飞行阶段"></a><a href="#performance" aria-label="性能"></a><a href="#contact" aria-label="合作"></a>
+  <div id="statusHint">??????????????????????</div>
+  <div id="viewBadge">???? ? OVERVIEW</div>
+  <button id="manualToggle" type="button">? ????</button>
+  <nav id="chapterRail" aria-label="????">
+    <a href="#hero" aria-label="??"></a><a href="#value" aria-label="??"></a><a href="#aircraft" aria-label="??"></a><a href="#installation" aria-label="????"></a><a href="#explosion" aria-label="???"></a><a href="#principle" aria-label="??"></a><a href="#comparison" aria-label="??"></a><a href="#flight" aria-label="????"></a><a href="#performance" aria-label="??"></a><a href="#contact" aria-label="??"></a>
   </nav>
 
   <main id="story">
     <section id="hero" class="story-section" data-scene="hero">
       <article class="story-card hero-card">
         <div class="eyebrow">AEROSPACE METAMATERIAL SYSTEM / 01</div>
-        <h2>让振动止于<br>结构之内</h2>
-        <p>面向民用航空器的超材料减震壁板，以可设计的局域共振单元重构振动传播路径，在重量、空间与客舱舒适性之间建立新的工程平衡。</p>
-        <div class="hero-actions"><a class="cta" href="#aircraft">探索技术 ↓</a><button class="cta ghost" id="autoStoryButton" type="button">▶ 自动演示</button></div>
+        <h2>?????<br>????</h2>
+        <p>???????????????????????????????????????????????????????????</p>
+        <div class="hero-actions"><a class="cta" href="#aircraft">???? ?</a><button class="cta ghost" id="autoStoryButton" type="button">? ????</button></div>
       </article>
     </section>
 
     <section id="value" class="story-section right" data-scene="value">
       <article class="story-card">
-        <div class="eyebrow">PRODUCT VALUE / 02</div><h2>不是隔绝噪声，<br>而是管理能量</h2>
-        <p>在振动进入客舱之前，通过周期性结构、阻尼界面与多层承载体系形成针对性衰减。原型数值为演示数据，保留真实试验数据替换接口。</p>
-        <div class="micro-grid"><div class="micro-stat"><strong>−42%</strong><span>振动响应 · DEMO</span></div><div class="micro-stat"><strong>−12 dB</strong><span>关键频段 · DEMO</span></div><div class="micro-stat"><strong>4 stages</strong><span>全飞行阶段覆盖</span></div></div>
+        <div class="eyebrow">PRODUCT VALUE / 02</div><h2>???????<br>??????</h2>
+        <p>????????????????????????????????????????????????????????????</p>
+        <div class="micro-grid"><div class="micro-stat"><strong>?42%</strong><span>???? ? DEMO</span></div><div class="micro-stat"><strong>?12 dB</strong><span>???? ? DEMO</span></div><div class="micro-stat"><strong>4 stages</strong><span>???????</span></div></div>
       </article>
     </section>
 
     <section id="aircraft" class="story-section" data-scene="aircraft">
-      <article class="story-card"><div class="eyebrow">AIRCRAFT DIGITAL TWIN / 03</div><h2>A320 级窄体客机应用场景</h2><p>程序化近似模型用于原型展示：包含流线机身、后掠翼、发动机、起落架、航行灯、舱门、客舱窗与内部框架。可拖拽旋转、滚轮缩放，并在手动探索模式中切换视角。</p><div class="layer-list"><div class="layer-item"><i style="--c:#38bdf8"></i><span>飞机级数字孪生</span><em>INTERACTIVE</em></div><div class="layer-item"><i style="--c:#22c55e"></i><span>内部承载框架</span><em>STRUCTURE</em></div><div class="layer-item"><i style="--c:#fb923c"></i><span>壁板安装区域</span><em>HIGHLIGHT</em></div></div></article>
+      <article class="story-card"><div class="eyebrow">AIRCRAFT DIGITAL TWIN / 03</div><h2>A320 ?????????</h2><p>??????????????????????????????????????????????????????????????????????????</p><div class="layer-list"><div class="layer-item"><i style="--c:#38bdf8"></i><span>???????</span><em>INTERACTIVE</em></div><div class="layer-item"><i style="--c:#22c55e"></i><span>??????</span><em>STRUCTURE</em></div><div class="layer-item"><i style="--c:#fb923c"></i><span>??????</span><em>HIGHLIGHT</em></div></div></article>
     </section>
 
     <section id="installation" class="story-section right" data-scene="installation">
-      <article class="story-card"><div class="eyebrow">INSTALLATION ZONE / 04</div><h2>从整机，精确定位到后客舱</h2><p>镜头跟随后机身分离，蒙皮透明度降低，环框、纵梁与地板结构显现。青色扫描光标定超材料壁板沿侧壁和顶部的安装位置。</p><div class="micro-grid"><div class="micro-stat"><strong>3</strong><span>模块化区域</span></div><div class="micro-stat"><strong>360°</strong><span>自由观察</span></div><div class="micro-stat"><strong>1 click</strong><span>复原/拆解</span></div></div></article>
+      <article class="story-card"><div class="eyebrow">INSTALLATION ZONE / 04</div><h2>????????????</h2><p>???????????????????????????????????????????????????????</p><div class="micro-grid"><div class="micro-stat"><strong>3</strong><span>?????</span></div><div class="micro-stat"><strong>360?</strong><span>????</span></div><div class="micro-stat"><strong>1 click</strong><span>??/??</span></div></div></article>
     </section>
 
     <section id="explosion" class="story-section" data-scene="explosion">
-      <article class="story-card"><div class="eyebrow">ENGINEERED EXPLOSION / 05</div><h2>五层结构，按工程秩序展开</h2><p>原型以三层可视模型承载五层工程语义；正式 CAD/GLB 接入后可直接扩展为完整层级，不改变镜头与交互接口。</p><div class="layer-list"><div class="layer-item"><i style="--c:#60a5fa"></i><span>表层蒙皮 / 隔声面板</span><em>AL-LI / CFRP</em></div><div class="layer-item"><i style="--c:#94a3b8"></i><span>承载结构</span><em>LOAD PATH</em></div><div class="layer-item"><i style="--c:#fb923c"></i><span>超材料减震单元</span><em>RESONATOR</em></div><div class="layer-item"><i style="--c:#22d3ee"></i><span>隔振层</span><em>VISCOELASTIC</em></div><div class="layer-item"><i style="--c:#e2e8f0"></i><span>连接与内饰层</span><em>INTERFACE</em></div></div></article>
+      <article class="story-card"><div class="eyebrow">ENGINEERED EXPLOSION / 05</div><h2>????????????</h2><p>???????????????????? CAD/GLB ?????????????????????????</p><div class="layer-list"><div class="layer-item"><i style="--c:#60a5fa"></i><span>???? / ????</span><em>AL-LI / CFRP</em></div><div class="layer-item"><i style="--c:#94a3b8"></i><span>????</span><em>LOAD PATH</em></div><div class="layer-item"><i style="--c:#fb923c"></i><span>???????</span><em>RESONATOR</em></div><div class="layer-item"><i style="--c:#22d3ee"></i><span>???</span><em>VISCOELASTIC</em></div><div class="layer-item"><i style="--c:#e2e8f0"></i><span>??????</span><em>INTERFACE</em></div></div></article>
     </section>
 
     <section id="principle" class="story-section right" data-scene="principle">
-      <article class="story-card"><div class="eyebrow">ENERGY PATH / 06</div><h2>看见振动如何被分散与衰减</h2><p>橙色代表输入能量，青色代表经局域共振和阻尼界面重分配后的低能响应。动画仅用于原理说明，不代表真实有限元结果。</p><canvas id="energyCanvas" width="900" height="320" aria-label="振动能量传播演示"></canvas></article>
+      <article class="story-card"><div class="eyebrow">ENERGY PATH / 06</div><h2>????????????</h2><p>??????????????????????????????????????????????????????</p><canvas id="energyCanvas" width="900" height="320" aria-label="????????"></canvas></article>
     </section>
 
     <section id="comparison" class="story-section center" data-scene="comparison">
-      <article class="story-card wide"><div class="eyebrow">A/B LABORATORY / 07</div><h2>相同激励，不同结构响应 <span class="demo-tag">演示数据</span></h2><p>两侧采用相同激励条件。热力场、振幅和噪声数值随飞行工况同步更新，数据源可替换为试验 CSV/JSON 或后端 API。</p><div class="compare-shell"><div class="compare-cell"><h3>普通航空壁板</h3><div class="heat"></div><span id="normalCompareValue" class="compare-value">1.00 g</span></div><div class="compare-cell meta"><h3>超材料减震壁板</h3><div class="heat"></div><span id="metaCompareValue" class="compare-value">0.58 g</span></div></div></article>
+      <article class="story-card wide"><div class="eyebrow">A/B LABORATORY / 07</div><h2>??????????? <span class="demo-tag">????</span></h2><p>????????????????????????????????????????? CSV/JSON ??? API?</p><div class="compare-shell"><div class="compare-cell"><h3>??????</h3><div class="heat"></div><span id="normalCompareValue" class="compare-value">1.00 g</span></div><div class="compare-cell meta"><h3>???????</h3><div class="heat"></div><span id="metaCompareValue" class="compare-value">0.58 g</span></div></div></article>
     </section>
 
     <section id="flight" class="story-section right" data-scene="flight">
-      <article class="story-card wide"><div class="eyebrow">FLIGHT ENVELOPE / 08</div><h2>覆盖完整飞行阶段</h2><p>场景姿态、灯光、激励强度和数据面板同步变化。点击阶段可暂停滚动叙事并查看对应演示指标。</p><div class="flight-tabs"><button class="flight-tab active" data-stage="takeoff">起飞</button><button class="flight-tab" data-stage="cruise">爬升与巡航</button><button class="flight-tab" data-stage="descent">下降</button><button class="flight-tab" data-stage="landing">着陆</button></div><div class="flight-readout"><div><small>普通壁板振幅</small><strong id="flightNormal">1.00 g</strong></div><div><small>超材料壁板</small><strong id="flightMeta">0.58 g</strong></div><div><small>客舱噪声</small><strong id="flightNoise">71 dB</strong></div><div><small>衰减率</small><strong id="flightReduction">42%</strong></div></div></article>
+      <article class="story-card wide"><div class="eyebrow">FLIGHT ENVELOPE / 08</div><h2>????????</h2><p>???????????????????????????????????????????</p><div class="flight-tabs"><button class="flight-tab active" data-stage="takeoff">??</button><button class="flight-tab" data-stage="cruise">?????</button><button class="flight-tab" data-stage="descent">??</button><button class="flight-tab" data-stage="landing">??</button></div><div class="flight-readout"><div><small>??????</small><strong id="flightNormal">1.00 g</strong></div><div><small>?????</small><strong id="flightMeta">0.58 g</strong></div><div><small>????</small><strong id="flightNoise">71 dB</strong></div><div><small>???</small><strong id="flightReduction">42%</strong></div></div></article>
     </section>
 
     <section id="performance" class="story-section" data-scene="performance">
-      <article class="story-card wide"><div class="eyebrow">ENGINEERING VALUE / 09</div><h2>把舒适性转化为可验证指标</h2><p>所有数字均以“DEMO”标记，并通过独立 JSON 数据层管理。后续接入试验数据时无需改动 3D 场景逻辑。</p><div class="value-grid"><div class="value-card"><strong>15–35 dB</strong><span>交互式降噪区间 · DEMO</span></div><div class="value-card"><strong>−42%</strong><span>峰值响应变化 · DEMO</span></div><div class="value-card"><strong>4 modes</strong><span>飞行工况数字孪生</span></div><div class="value-card"><strong>GLB ready</strong><span>真实 CAD 模型替换接口</span></div><div class="value-card"><strong>60 FPS</strong><span>桌面目标帧率</span></div><div class="value-card"><strong>Adaptive</strong><span>移动端自动降级</span></div></div></article>
+      <article class="story-card wide"><div class="eyebrow">ENGINEERING VALUE / 09</div><h2>????????????</h2><p>???????DEMO????????? JSON ??????????????????? 3D ?????</p><div class="value-grid"><div class="value-card"><strong>15?35 dB</strong><span>??????? ? DEMO</span></div><div class="value-card"><strong>?42%</strong><span>?????? ? DEMO</span></div><div class="value-card"><strong>4 modes</strong><span>????????</span></div><div class="value-card"><strong>GLB ready</strong><span>?? CAD ??????</span></div><div class="value-card"><strong>60 FPS</strong><span>??????</span></div><div class="value-card"><strong>Adaptive</strong><span>???????</span></div></div></article>
     </section>
 
     <section id="contact" class="story-section center" data-scene="contact">
-      <article class="story-card wide contact-card"><div class="eyebrow">CO-CREATE THE NEXT CABIN / 10</div><h2>让下一代客舱，更安静，也更轻</h2><p>支持联合仿真、样件验证、机型适配与适航工程协同。请在正式上线前替换品牌信息、真实试验数据和业务联系方式。</p><a class="cta" href="mailto:business@example.com">发起技术合作 →</a></article>
+      <article class="story-card wide contact-card"><div class="eyebrow">CO-CREATE THE NEXT CABIN / 10</div><h2>??????????????</h2><p>????????????????????????????????????????????????????</p><a class="cta" href="mailto:business@example.com">?????? ?</a></article>
     </section>
   </main>
 
@@ -611,12 +611,13 @@
     let connectorLines = [];
     let scanBeam;
     let pulseRings = [];
+    let engineFanRotors = [];
     let sceneClock;
     let dampingPanelMaterial;
     let originalPanelColor;
     let originalPanelOpacity;
 
-    const defaultCameraPosition = new THREE.Vector3(30, 15, 40);
+    const defaultCameraPosition = new THREE.Vector3(30, 13, -42);
     const defaultTarget = new THREE.Vector3(0, 0, 0);
     const planeGroup = new THREE.Group();
     planeGroup.name = "planeGroup";
@@ -654,7 +655,7 @@
         metalness: 0.28,
         roughness: 0.36,
         transparent: true,
-        opacity: 0.38,
+        opacity: 1,
         side: THREE.DoubleSide
       }),
       frame: new THREE.MeshStandardMaterial({ color: 0x4a5568, metalness: 0.25, roughness: 0.65 }),
@@ -729,14 +730,14 @@
         animate();
         requestAnimationFrame(() => setTimeout(() => document.getElementById("loader").classList.add("done"), 650));
       } catch (error) {
-        document.getElementById("statusHint").textContent = "初始化失败，请检查浏览器 WebGL 支持。";
-        document.querySelector("#loader small").textContent = "WEBGL INITIALIZATION FAILED · 已切换为内容浏览模式";
+        document.getElementById("statusHint").textContent = "???????????? WebGL ???";
+        document.querySelector("#loader small").textContent = "WEBGL INITIALIZATION FAILED ? ??????????";
         setTimeout(() => document.getElementById("loader").classList.add("done"), 1600);
         console.error(error);
       }
     }
 
-    // 场景、相机与渲染器基础配置
+    // ?????????????
     function initScene() {
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0x1a1a2e);
@@ -792,7 +793,7 @@
       scene.add(grid);
     }
 
-    // 飞机模型严格归入 planeGroup 与 5 个命名子组
+    // ???????? planeGroup ? 5 ?????
     function createAircraftModel() {
       planeGroup.add(fuselageMainGroup, wingGroup, internalFrameGroup, rearFuselageGroup, landingGearGroup);
       scene.add(planeGroup);
@@ -804,7 +805,7 @@
       createAircraftDetails();
     }
 
-    // 真实 GLB 替换接口：设置 window.METAPANEL_CONFIG.aircraftModelUrl 即可启用。
+    // ?? GLB ??????? window.METAPANEL_CONFIG.aircraftModelUrl ?????
     function loadConfiguredAircraftModel() {
       const url = window.METAPANEL_CONFIG && window.METAPANEL_CONFIG.aircraftModelUrl;
       if (!url) return;
@@ -820,12 +821,12 @@
         });
         planeGroup.visible = false;
         scene.add(externalModel);
-        navStatus.textContent = "授权机型模型已加载";
+        navStatus.textContent = "?????????";
       }, (event) => {
-        if (event.total) navStatus.textContent = "模型加载 " + Math.round(event.loaded / event.total * 100) + "%";
+        if (event.total) navStatus.textContent = "???? " + Math.round(event.loaded / event.total * 100) + "%";
       }, () => {
         planeGroup.visible = true;
-        navStatus.textContent = "外部模型不可用，已使用程序化机型";
+        navStatus.textContent = "????????????????";
       });
     }
 
@@ -950,10 +951,10 @@
 
     function createFuselageLivery(parent, section) {
       if (section === "main") {
-        const leftText = createLiveryPlane("中国东方航空  CHINA EASTERN", "#1e3a8a", 7.8, 0.62);
+        const leftText = createLiveryPlane("??????  CHINA EASTERN", "#1e3a8a", 7.8, 0.62);
         leftText.position.set(-2.94, 1.25, -8.4);
         leftText.rotation.y = -Math.PI / 2;
-        const rightText = createLiveryPlane("中国东方航空  CHINA EASTERN", "#1e3a8a", 7.8, 0.62);
+        const rightText = createLiveryPlane("??????  CHINA EASTERN", "#1e3a8a", 7.8, 0.62);
         rightText.position.set(2.94, 1.25, -8.4);
         rightText.rotation.y = Math.PI / 2;
         parent.add(leftText, rightText);
@@ -998,7 +999,7 @@
 
       const leftModule = createPanelModule({
         name: "leftDampingPanelModule",
-        label: "左侧壁板模块",
+        label: "??????",
         size: sideSize,
         home: new THREE.Vector3(-2.45, 0.35, 13.2),
         exploded: new THREE.Vector3(-6.25, 0.85, 15.1),
@@ -1011,7 +1012,7 @@
 
       const rightModule = createPanelModule({
         name: "rightDampingPanelModule",
-        label: "右侧壁板模块",
+        label: "??????",
         size: sideSize,
         home: new THREE.Vector3(2.45, 0.35, 13.2),
         exploded: new THREE.Vector3(6.25, 0.85, 15.1),
@@ -1024,7 +1025,7 @@
 
       const crownModule = createPanelModule({
         name: "crownDampingPanelModule",
-        label: "顶部壁板模块",
+        label: "??????",
         size: crownSize,
         home: new THREE.Vector3(0, 2.45, 13.2),
         exploded: new THREE.Vector3(0, 5.55, 15.0),
@@ -1057,9 +1058,9 @@
       module.userData.layers = [];
 
       const layerConfigs = [
-        { name: "outerAcousticFace", label: "外侧隔声面板", material: dampingPanelMaterial, offset: 0 },
-        { name: "viscoelasticCore", label: "阻尼吸能芯层", material: materials.dampingCore, offset: 0 },
-        { name: "cabinTrimLiner", label: "客舱内饰衬板", material: materials.cabinLiner, offset: 0 }
+        { name: "outerAcousticFace", label: "??????", material: dampingPanelMaterial, offset: 0 },
+        { name: "viscoelasticCore", label: "??????", material: materials.dampingCore, offset: 0 },
+        { name: "cabinTrimLiner", label: "??????", material: materials.cabinLiner, offset: 0 }
       ];
 
       layerConfigs.forEach((layerConfig, index) => {
@@ -1199,8 +1200,8 @@
       const rightWing = createSweptWing("rightMainWing", 1);
       const leftWinglet = createWinglet("leftSharklet", -1);
       const rightWinglet = createWinglet("rightSharklet", 1);
-      const leftEngine = createEngineAssembly("leftCFMEngine", -5.75, -2.12, -0.2);
-      const rightEngine = createEngineAssembly("rightCFMEngine", 5.75, -2.12, -0.2);
+      const leftEngine = createEngineAssembly("leftCFMEngine", -5.9, -1.95, -2.35);
+      const rightEngine = createEngineAssembly("rightCFMEngine", 5.9, -1.95, -2.35);
       const leftTail = createHorizontalTail("leftHorizontalTail", -1);
       const rightTail = createHorizontalTail("rightHorizontalTail", 1);
       const verticalTail = createVerticalTail();
@@ -1231,7 +1232,7 @@
       shape.lineTo(side * 16.2, 5.95);
       shape.lineTo(side * 2.0, 3.95);
       shape.lineTo(side * 1.75, -1.65);
-      const geometry = new THREE.ExtrudeGeometry(shape, { depth: 0.18, bevelEnabled: false });
+      const geometry = new THREE.ExtrudeGeometry(shape, { depth: 0.2, bevelEnabled: true, bevelSegments: 2, bevelSize: 0.055, bevelThickness: 0.04 });
       geometry.rotateX(Math.PI / 2);
       geometry.translate(0, -0.64, 0);
       const wing = new THREE.Mesh(geometry, materials.fuselage);
@@ -1250,6 +1251,13 @@
       flapLine.position.set(side * 8.2, 0.12, 3.68);
       flapLine.rotation.y = side * 0.14;
       wing.add(flapLine);
+
+      const leadingEdge = new THREE.Mesh(new THREE.CapsuleGeometry(0.055, 12.8, 4, 12), new THREE.MeshStandardMaterial({ color: 0xdbe4ed, metalness: 0.42, roughness: 0.24 }));
+      leadingEdge.name = name + "_polishedLeadingEdge";
+      leadingEdge.position.set(side * 8.8, 0.03, 1.42);
+      leadingEdge.rotation.x = Math.PI / 2;
+      leadingEdge.rotation.z = side * -1.405;
+      wing.add(leadingEdge);
 
       for (let i = 0; i < 3; i++) {
         const fairing = new THREE.Mesh(new THREE.CapsuleGeometry(0.16, 1.35, 6, 12), materials.frame);
@@ -1271,10 +1279,10 @@
       shape.lineTo(side * 0.52, 2.85);
       shape.lineTo(side * 0.08, 2.4);
       shape.lineTo(0, 0);
-      const geometry = new THREE.ShapeGeometry(shape);
+      const geometry = new THREE.ExtrudeGeometry(shape, { depth: 0.16, bevelEnabled: true, bevelSegments: 2, bevelSize: 0.035, bevelThickness: 0.025 });
       const winglet = new THREE.Mesh(geometry, materials.fuselage);
       winglet.name = name;
-      winglet.position.set(side * 16.9, -0.48, 5.2);
+      winglet.position.set(side * 17.05, -0.48, 5.08);
       winglet.rotation.y = side * 0.22;
       winglet.rotation.z = side * -0.18;
       winglet.castShadow = true;
@@ -1292,36 +1300,52 @@
       group.name = name;
       group.position.set(x, y, z);
 
-      const nacelle = new THREE.Mesh(new THREE.CylinderGeometry(0.92, 1.02, 2.55, 64, 1, true), materials.fuselage);
+      const nacelleProfile = [
+        new THREE.Vector2(0.82, -1.48),
+        new THREE.Vector2(1.04, -1.30),
+        new THREE.Vector2(1.08, -0.78),
+        new THREE.Vector2(1.02, 0.62),
+        new THREE.Vector2(0.82, 1.38)
+      ];
+      const nacelleGeometry = new THREE.LatheGeometry(nacelleProfile, 72);
+      nacelleGeometry.rotateX(Math.PI / 2);
+      nacelleGeometry.computeVertexNormals();
+      const nacelle = new THREE.Mesh(nacelleGeometry, materials.fuselage);
       nacelle.name = name + "_whiteNacelle";
-      nacelle.rotation.x = Math.PI / 2;
       nacelle.castShadow = true;
       nacelle.receiveShadow = true;
 
-      const intakeRing = new THREE.Mesh(new THREE.TorusGeometry(1.02, 0.075, 12, 64), materials.fuselage);
+      const intakeRing = new THREE.Mesh(new THREE.TorusGeometry(1.035, 0.09, 16, 72), new THREE.MeshStandardMaterial({ color: 0xe8eef4, metalness: 0.72, roughness: 0.16 }));
       intakeRing.name = name + "_intakeLip";
-      intakeRing.rotation.x = Math.PI / 2;
-      intakeRing.position.z = -1.28;
+      intakeRing.position.z = -1.38;
 
       const innerDark = new THREE.Mesh(new THREE.CylinderGeometry(0.74, 0.74, 0.08, 48), materials.engineInterior);
       innerDark.name = name + "_darkIntake";
       innerDark.rotation.x = Math.PI / 2;
       innerDark.position.z = -1.34;
 
-      const fanHub = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.13, 0.11, 24), materials.fanBlade);
+      const fanRotor = new THREE.Group();
+      fanRotor.name = name + "_fanRotor";
+      fanRotor.position.z = -1.43;
+      const fanHub = new THREE.Mesh(new THREE.ConeGeometry(0.18, 0.34, 32), materials.fanBlade);
       fanHub.name = name + "_fanHub";
       fanHub.rotation.x = Math.PI / 2;
-      fanHub.position.z = -1.41;
-      for (let i = 0; i < 14; i++) {
-        const blade = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.38, 0.025), materials.fanBlade);
+      fanHub.position.z = -0.08;
+      for (let i = 0; i < 18; i++) {
+        const bladeShape = new THREE.Shape();
+        bladeShape.moveTo(-0.045, 0.12);
+        bladeShape.lineTo(0.07, 0.12);
+        bladeShape.lineTo(0.15, 0.72);
+        bladeShape.lineTo(-0.07, 0.78);
+        bladeShape.closePath();
+        const blade = new THREE.Mesh(new THREE.ShapeGeometry(bladeShape), materials.fanBlade);
         blade.name = name + "_fanBlade";
-        blade.position.z = -1.42;
-        blade.rotation.z = (i / 14) * Math.PI * 2;
-        blade.position.x = Math.cos(blade.rotation.z) * 0.27;
-        blade.position.y = Math.sin(blade.rotation.z) * 0.27;
-        blade.rotation.z += 0.35;
-        group.add(blade);
+        blade.rotation.z = (i / 18) * Math.PI * 2 + 0.15;
+        blade.position.z = 0;
+        fanRotor.add(blade);
       }
+      fanRotor.add(fanHub);
+      engineFanRotors.push(fanRotor);
 
       const pylon = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.85, 1.18), materials.frame);
       pylon.name = name + "_pylon";
@@ -1342,7 +1366,11 @@
       exhaustCone.rotation.x = -Math.PI / 2;
       exhaustCone.position.z = 1.82;
 
-      group.add(nacelle, intakeRing, innerDark, fanHub, pylon, blueStripe, exhaust, exhaustCone);
+      const nacellePanelLine = new THREE.Mesh(new THREE.TorusGeometry(0.99, 0.018, 8, 64), materials.doorLine);
+      nacellePanelLine.name = name + "_servicePanelLine";
+      nacellePanelLine.position.z = 0.72;
+
+      group.add(nacelle, intakeRing, innerDark, fanRotor, pylon, blueStripe, nacellePanelLine, exhaust, exhaustCone);
       return group;
     }
 
@@ -1353,7 +1381,7 @@
       shape.lineTo(side * 6.35, 24.2);
       shape.lineTo(side * 0.8, 23.25);
       shape.lineTo(side * 0.45, 20.9);
-      const geometry = new THREE.ExtrudeGeometry(shape, { depth: 0.14, bevelEnabled: false });
+      const geometry = new THREE.ExtrudeGeometry(shape, { depth: 0.18, bevelEnabled: true, bevelSegments: 2, bevelSize: 0.045, bevelThickness: 0.03 });
       geometry.rotateX(Math.PI / 2);
       geometry.translate(0, 1.05, 0);
       const tail = new THREE.Mesh(geometry, materials.fuselage);
@@ -1364,19 +1392,42 @@
     }
 
     function createVerticalTail() {
+      const tail = new THREE.Group();
+      tail.name = "integratedSweptVerticalStabilizer";
       const shape = new THREE.Shape();
-      shape.moveTo(20.2, 1.25);
-      shape.lineTo(24.4, 1.25);
-      shape.lineTo(23.25, 7.45);
-      shape.lineTo(20.75, 2.35);
-      shape.lineTo(20.2, 1.25);
-      const geometry = new THREE.ExtrudeGeometry(shape, { depth: 0.22, bevelEnabled: false });
-      geometry.rotateY(Math.PI / 2);
-      geometry.translate(-0.11, 0, 0);
-      const tail = new THREE.Mesh(geometry, materials.fuselage);
-      tail.name = "verticalTailWithLivery";
-      tail.castShadow = true;
-      tail.receiveShadow = true;
+      shape.moveTo(19.65, 1.55);
+      shape.bezierCurveTo(20.45, 2.9, 21.25, 5.55, 21.95, 7.35);
+      shape.quadraticCurveTo(22.15, 7.72, 22.52, 7.48);
+      shape.lineTo(24.18, 1.72);
+      shape.quadraticCurveTo(21.95, 1.42, 19.65, 1.55);
+      const geometry = new THREE.ExtrudeGeometry(shape, { depth: 0.52, bevelEnabled: true, bevelSegments: 3, bevelSize: 0.075, bevelThickness: 0.055 });
+      geometry.rotateY(-Math.PI / 2);
+      geometry.translate(0.26, 0, 0);
+      geometry.computeVertexNormals();
+      const fin = new THREE.Mesh(geometry, materials.liveryBlue);
+      fin.name = "verticalStabilizerAirfoil";
+      fin.castShadow = true;
+      fin.receiveShadow = true;
+
+      const capShape = new THREE.Shape();
+      capShape.moveTo(20.35, 2.12);
+      capShape.bezierCurveTo(20.95, 3.35, 21.55, 5.55, 22.02, 6.85);
+      capShape.lineTo(22.42, 6.88);
+      capShape.lineTo(23.72, 2.08);
+      capShape.closePath();
+      const capGeometry = new THREE.ExtrudeGeometry(capShape, { depth: 0.535, bevelEnabled: false });
+      capGeometry.rotateY(-Math.PI / 2);
+      capGeometry.translate(0.267, 0, 0);
+      const blueCap = new THREE.Mesh(capGeometry, materials.liveryBlue);
+      blueCap.name = "verticalStabilizerBlueLivery";
+
+      const rootFairing = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 18), materials.fuselage);
+      rootFairing.name = "verticalStabilizerRootFairing";
+      rootFairing.scale.set(0.48, 0.42, 2.25);
+      rootFairing.position.set(0, 1.92, 20.72);
+      rootFairing.castShadow = true;
+      rootFairing.receiveShadow = true;
+      tail.add(rootFairing, fin, blueCap);
       return tail;
     }
 
@@ -1404,9 +1455,9 @@
       const texture = new THREE.CanvasTexture(canvas);
       texture.colorSpace = THREE.SRGBColorSpace;
       const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true, depthWrite: false, side: THREE.DoubleSide });
-      const logo = new THREE.Mesh(new THREE.PlaneGeometry(2.8, 2.8), material);
+      const logo = new THREE.Mesh(new THREE.PlaneGeometry(2.35, 2.35), material);
       logo.name = side < 0 ? "leftTailLiveryMark" : "rightTailLiveryMark";
-      logo.position.set(side * 0.18, 4.85, 22.35);
+      logo.position.set(side * 0.288, 4.72, 22.58);
       logo.rotation.y = side > 0 ? Math.PI / 2 : -Math.PI / 2;
       return logo;
     }
@@ -1445,7 +1496,7 @@
       createGearAssembly(1.72, -1.92, 1.8, landingGearGroup, "main");
     }
 
-    // 补充 A320 外观识别细节：雷达罩分界、天线、航行灯、APU 排气与起落架舱门。
+    // ?? A320 ????????????????????APU ?????????
     function createAircraftDetails() {
       const detailGroup = new THREE.Group();
       detailGroup.name = "aircraftSurfaceDetailGroup";
@@ -1608,12 +1659,12 @@
       renderer.domElement.addEventListener("click", handleCanvasClick);
       splitButton.addEventListener("click", async () => {
         await animateRearFuselage(15, true);
-        await fitObjectsToView([rearFuselageGroup], "后机身结构 · AFT SECTION", 1.22);
+        await fitObjectsToView([rearFuselageGroup], "????? ? AFT SECTION", 1.22);
       });
       resetButton.addEventListener("click", async () => {
         if (isExploded) await animatePanelExplosion(false);
         await animateRearFuselage(0, false);
-        await switchView(defaultCameraPosition, defaultTarget, "整体构型 · OVERVIEW");
+        await switchView(defaultCameraPosition, defaultTarget, "???? ? OVERVIEW");
       });
       explodeButton.addEventListener("click", async () => {
         if (!isSplit) await animateRearFuselage(15, true);
@@ -1623,15 +1674,15 @@
       implodeButton.addEventListener("click", () => animatePanelExplosion(false));
       showcaseButton.addEventListener("click", runShowcase);
       explosionViewButton.addEventListener("click", focusExplosionView);
-      overviewButton.addEventListener("click", () => switchView(new THREE.Vector3(30, 15, 40), new THREE.Vector3(0, 0, 0), "整体构型 · OVERVIEW"));
-      rearViewButton.addEventListener("click", () => switchView(new THREE.Vector3(17, 8, 31), new THREE.Vector3(0, 0.5, 14), "后机身结构 · AFT SECTION"));
-      insideViewButton.addEventListener("click", () => switchView(new THREE.Vector3(0, 0.1, 7.1), new THREE.Vector3(2.3, 0.45, 14.0), "客舱内部 · CABIN INTERIOR"));
+      overviewButton.addEventListener("click", () => switchView(new THREE.Vector3(30, 13, -42), new THREE.Vector3(0, 0, 0), "???? ? OVERVIEW"));
+      rearViewButton.addEventListener("click", () => switchView(new THREE.Vector3(17, 8, 31), new THREE.Vector3(0, 0.5, 14), "????? ? AFT SECTION"));
+      insideViewButton.addEventListener("click", () => switchView(new THREE.Vector3(0, 0.1, 7.1), new THREE.Vector3(2.3, 0.45, 14.0), "???? ? CABIN INTERIOR"));
       orbitButton.addEventListener("click", () => {
         isOrbiting = !isOrbiting;
         controls.autoRotate = isOrbiting;
         controls.autoRotateSpeed = 0.72;
-        orbitButton.textContent = isOrbiting ? "停止环绕" : "环绕巡检";
-        navStatus.textContent = isOrbiting ? "环绕巡检运行中" : "环绕巡检已停止";
+        orbitButton.textContent = isOrbiting ? "????" : "????";
+        navStatus.textContent = isOrbiting ? "???????" : "???????";
       });
       xrayButton.addEventListener("click", toggleXray);
       fullscreenButton.addEventListener("click", toggleFullscreen);
@@ -1648,7 +1699,7 @@
         const data = await response.json();
         if (data && data.stages) performanceData = data;
       } catch (error) {
-        // file:// 预览或接口不可用时使用同结构的内置演示数据。
+        // file:// ??????????????????????
         performanceData = fallbackPerformanceData;
       }
       updateFlightStage("takeoff");
@@ -1657,7 +1708,7 @@
     function initStoryExperience() {
       manualToggle.addEventListener("click", () => {
         document.body.classList.toggle("manual-mode");
-        manualToggle.textContent = document.body.classList.contains("manual-mode") ? "× 关闭探索" : "◫ 手动探索";
+        manualToggle.textContent = document.body.classList.contains("manual-mode") ? "? ????" : "? ????";
       });
       autoStoryButton.addEventListener("click", runAutoStory);
       document.querySelectorAll(".flight-tab").forEach((button) => button.addEventListener("click", () => updateFlightStage(button.dataset.stage)));
@@ -1694,24 +1745,26 @@
     async function applyStoryScene(sceneName) {
       document.body.classList.toggle("data-visible", ["comparison", "flight", "performance"].includes(sceneName));
       document.body.classList.toggle("explosion-visible", ["explosion", "principle"].includes(sceneName));
+      const skinOpacityByScene = { installation: 0.2, explosion: 0.12, principle: 0.08 };
+      setRearSkinOpacity(skinOpacityByScene[sceneName] ?? 1, 850);
       if (sceneName !== "contact") {
         controls.autoRotate = false;
         isOrbiting = false;
-        orbitButton.textContent = "环绕巡检";
+        orbitButton.textContent = "????";
       }
 
       if (["hero", "value", "aircraft"].includes(sceneName)) {
         if (isExploded) await animatePanelExplosion(false);
         if (isSplit) await animateRearFuselage(0, false);
         const views = {
-          hero: [new THREE.Vector3(29, 12, 42), new THREE.Vector3(0, 0, 0), "整机数字孪生 · AIRCRAFT"],
-          value: [new THREE.Vector3(-31, 10, 30), new THREE.Vector3(0, 0, 0), "能量管理系统 · METAMATERIAL"],
-          aircraft: [new THREE.Vector3(27, 9, 35), new THREE.Vector3(0, 0, 1), "A320 级应用场景 · NARROW BODY"]
+          hero: [new THREE.Vector3(29, 12, -42), new THREE.Vector3(0, 0, -1), "?????? ? AIRCRAFT"],
+          value: [new THREE.Vector3(-31, 10, -30), new THREE.Vector3(0, 0, -1), "?????? ? METAMATERIAL"],
+          aircraft: [new THREE.Vector3(27, 9, -35), new THREE.Vector3(0, 0, -1), "A320 ????? ? NARROW BODY"]
         };
         await switchView(...views[sceneName]);
       } else if (sceneName === "installation") {
         if (!isSplit) await animateRearFuselage(15, true);
-        await fitObjectsToView([rearFuselageGroup], "安装区域 · AFT CABIN", 1.26);
+        await fitObjectsToView([rearFuselageGroup], "???? ? AFT CABIN", 1.26);
       } else if (sceneName === "explosion") {
         if (!isSplit) await animateRearFuselage(15, true);
         if (!isExploded) await animatePanelExplosion(true);
@@ -1719,17 +1772,17 @@
       } else if (sceneName === "principle") {
         if (!isSplit) await animateRearFuselage(15, true);
         if (!isExploded) await animatePanelExplosion(true);
-        await switchView(new THREE.Vector3(14, 7, 38), new THREE.Vector3(0, .6, 29), "振动能量路径 · ENERGY FLOW");
+        await switchView(new THREE.Vector3(14, 7, 38), new THREE.Vector3(0, .6, 29), "?????? ? ENERGY FLOW");
       } else if (sceneName === "comparison") {
-        await switchView(new THREE.Vector3(-24, 8, 34), new THREE.Vector3(0, 0, 8), "同步激励实验 · A/B LAB");
+        await switchView(new THREE.Vector3(-24, 8, 34), new THREE.Vector3(0, 0, 8), "?????? ? A/B LAB");
       } else if (sceneName === "flight") {
         if (isExploded) await animatePanelExplosion(false);
         if (isSplit) await animateRearFuselage(0, false);
-        await switchView(new THREE.Vector3(25, 7, 33), new THREE.Vector3(0, 0, 0), "飞行包线 · FLIGHT ENVELOPE");
+        await switchView(new THREE.Vector3(25, 7, -33), new THREE.Vector3(0, 0, -1), "???? ? FLIGHT ENVELOPE");
       } else if (sceneName === "performance") {
-        await switchView(new THREE.Vector3(18, 5, 30), new THREE.Vector3(0, 0, 6), "工程指标 · PERFORMANCE");
+        await switchView(new THREE.Vector3(18, 5, 30), new THREE.Vector3(0, 0, 6), "???? ? PERFORMANCE");
       } else if (sceneName === "contact") {
-        await switchView(new THREE.Vector3(31, 13, 39), new THREE.Vector3(0, 0, 0), "合作与验证 · CO-CREATION");
+        await switchView(new THREE.Vector3(31, 13, -39), new THREE.Vector3(0, 0, -1), "????? ? CO-CREATION");
         controls.autoRotate = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         controls.autoRotateSpeed = 0.42;
       }
@@ -1738,7 +1791,7 @@
     async function runAutoStory() {
       if (autoStoryRunning) return;
       autoStoryRunning = true;
-      autoStoryButton.textContent = "自动演示中…";
+      autoStoryButton.textContent = "??????";
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const sectionIds = ["aircraft", "installation", "explosion", "principle", "comparison", "flight", "performance", "contact"];
       for (const id of sectionIds) {
@@ -1747,7 +1800,7 @@
         await delay(reduced ? 900 : 2600);
       }
       autoStoryRunning = false;
-      autoStoryButton.textContent = "▶ 自动演示";
+      autoStoryButton.textContent = "? ????";
     }
 
     function updateFlightStage(stageName) {
@@ -1764,11 +1817,19 @@
       new Tween(planeGroup.rotation).to({ x: attitudes[stageName] || 0 }, 900).easing(Easing.Quadratic.InOut).start();
     }
 
-    // 后段机身拆分与复位动画
+    // ???????????
+    function setRearSkinOpacity(opacity, duration = 650) {
+      return new Tween(materials.fuselageTransparent)
+        .to({ opacity }, duration)
+        .easing(Easing.Quadratic.InOut)
+        .start();
+    }
+
     function animateRearFuselage(targetZ, splitState) {
       if (isAnimating) return Promise.resolve();
       isAnimating = true;
-      navStatus.textContent = splitState ? "后机身拆分中" : "后机身复位中";
+      navStatus.textContent = splitState ? "??????" : "??????";
+      setRearSkinOpacity(splitState ? 0.18 : 1, 1000);
       updateUiState();
       return new Promise((resolve) => {
         new Tween(rearFuselageGroup.position)
@@ -1778,7 +1839,7 @@
             isSplit = splitState;
             if (!splitState) isExploded = false;
             isAnimating = false;
-            navStatus.textContent = splitState ? "后机身已拆分" : "系统待命";
+            navStatus.textContent = splitState ? "??????" : "????";
             updateUiState();
             resolve();
           })
@@ -1789,7 +1850,7 @@
     function animatePanelExplosion(explodeState) {
       if (isAnimating || (!isSplit && explodeState)) return Promise.resolve();
       isAnimating = true;
-      navStatus.textContent = explodeState ? "壁板爆炸图展开中" : "壁板模块收拢中";
+      navStatus.textContent = explodeState ? "????????" : "???????";
       updateUiState();
 
       const tweens = [];
@@ -1835,16 +1896,16 @@
           .onComplete(() => {
             isExploded = explodeState;
             isAnimating = false;
-            navStatus.textContent = explodeState ? "壁板爆炸图已展开" : "壁板模块已收拢";
+            navStatus.textContent = explodeState ? "????????" : "???????";
             materialInfo.innerHTML = explodeState
               ? [
-                  "爆炸图状态：三层减震壁板已展开",
-                  "外侧隔声面板：#63b3ed，半透明",
-                  "阻尼吸能芯层：#f6ad55，吸收振动能量",
-                  "客舱内饰衬板：#c4f1f9，面向客舱",
-                  "当前降噪系数：" + reductionSlider.value + " dB"
+                  "???????????????",
+                  "???????#63b3ed????",
+                  "???????#f6ad55???????",
+                  "???????#c4f1f9?????",
+                  "???????" + reductionSlider.value + " dB"
                 ].join("<br>")
-              : "拆分后点击淡蓝色减震壁板，可查看材料基础参数。";
+              : "???????????????????????";
             updateUiState();
             resolve();
           })
@@ -1865,8 +1926,8 @@
       insideViewButton.disabled = busy;
       orbitButton.disabled = busy;
       xrayButton.disabled = busy;
-      splitStateText.textContent = isSplit ? "已拆分" : "未拆分";
-      panelStateText.textContent = isExploded ? "爆炸展开" : "收拢";
+      splitStateText.textContent = isSplit ? "???" : "???";
+      panelStateText.textContent = isExploded ? "????" : "??";
       connectorLines.forEach((line) => {
         line.visible = isSplit && (isExploded || isAnimating);
       });
@@ -1880,7 +1941,7 @@
       return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
-    // 根据对象的实际三维包围盒自动计算相机距离，保证不同屏幕比例下完整入镜。
+    // ???????????????????????????????????
     function fitObjectsToView(objects, label, padding = 1.28, horizontalBias = 0) {
       const box = new THREE.Box3();
       objects.forEach((object) => box.expandByObject(object, true));
@@ -1899,17 +1960,17 @@
 
     function focusExplosionView() {
       if (!isSplit || isAnimating) return Promise.resolve();
-      return fitObjectsToView([rearFuselageGroup], "壁板爆炸全景 · EXPLODED ASSEMBLY", 1.6, 0.3);
+      return fitObjectsToView([rearFuselageGroup], "?????? ? EXPLODED ASSEMBLY", 1.6, 0.3);
     }
 
     function toggleXray() {
       isXray = !isXray;
       const rearSkin = rearFuselageGroup.getObjectByName("rearOuterSkin");
-      if (rearSkin) rearSkin.material.opacity = isXray ? 0.12 : 0.38;
+      if (rearSkin) setRearSkinOpacity(isXray ? 0.1 : (isSplit ? 0.18 : 1), 520);
       internalFrameGroup.visible = true;
-      xrayButton.textContent = isXray ? "关闭透视" : "机身透视";
-      navStatus.textContent = isXray ? "结构透视已开启" : "结构透视已关闭";
-      viewBadge.textContent = isXray ? "机身透视 · STRUCTURAL X-RAY" : (isExploded ? "壁板爆炸全景 · EXPLODED ASSEMBLY" : "整体构型 · OVERVIEW");
+      xrayButton.textContent = isXray ? "????" : "????";
+      navStatus.textContent = isXray ? "???????" : "???????";
+      viewBadge.textContent = isXray ? "???? ? STRUCTURAL X-RAY" : (isExploded ? "?????? ? EXPLODED ASSEMBLY" : "???? ? OVERVIEW");
     }
 
     async function toggleFullscreen() {
@@ -1917,24 +1978,24 @@
         if (!document.fullscreenElement) {
           await document.documentElement.requestFullscreen();
           document.body.classList.add("presentation");
-          fullscreenButton.textContent = "退出全屏";
+          fullscreenButton.textContent = "????";
         } else {
           await document.exitFullscreen();
         }
       } catch (error) {
-        navStatus.textContent = "浏览器未允许全屏";
+        navStatus.textContent = "????????";
       }
     }
 
     document.addEventListener("fullscreenchange", () => {
       if (!document.fullscreenElement) {
         document.body.classList.remove("presentation");
-        fullscreenButton.textContent = "全屏演示";
+        fullscreenButton.textContent = "????";
       }
       handleResize();
     });
 
-    // 平滑视角切换
+    // ??????
     function switchView(cameraTargetPosition, orbitTargetPosition, label) {
       if (isAnimating && !isShowcaseRunning) return Promise.resolve();
       const cameraStart = camera.position.clone();
@@ -1961,10 +2022,10 @@
     async function runShowcase() {
       if (isAnimating || isShowcaseRunning) return;
       isShowcaseRunning = true;
-      navStatus.textContent = "自动演示运行中";
+      navStatus.textContent = "???????";
       updateUiState();
       try {
-        await switchView(new THREE.Vector3(30, 15, 40), new THREE.Vector3(0, 0, 0));
+        await switchView(new THREE.Vector3(30, 13, -42), new THREE.Vector3(0, 0, -1));
         if (!isSplit) await animateRearFuselage(15, true);
         await delay(250);
         await switchView(new THREE.Vector3(15, 7, 28), new THREE.Vector3(0, 0.5, 14));
@@ -1972,15 +2033,15 @@
         await focusExplosionView();
         flashDampingPanel();
         await delay(1100);
-        await switchView(new THREE.Vector3(0, 0.2, 22.1), new THREE.Vector3(2.3, 0.5, 29.2), "客舱内部 · CABIN INTERIOR");
+        await switchView(new THREE.Vector3(0, 0.2, 22.1), new THREE.Vector3(2.3, 0.5, 29.2), "???? ? CABIN INTERIOR");
       } finally {
         isShowcaseRunning = false;
-        navStatus.textContent = "自动演示完成";
+        navStatus.textContent = "??????";
         updateUiState();
       }
     }
 
-    // 拆分状态下点击减震壁板，高亮并更新材料参数
+    // ?????????????????????
     function handleCanvasClick(event) {
       if (!isSplit || isAnimating) return;
       const rect = renderer.domElement.getBoundingClientRect();
@@ -1992,13 +2053,13 @@
       const clickedLayer = intersects[0].object;
       flashDampingPanel();
       materialInfo.innerHTML = [
-        "选中层级：" + (clickedLayer.userData.layerLabel || "复合减震壁板"),
-        "材料类型：三层复合减震壁板模块",
-        "外层：隔声面板 #63b3ed",
-        "芯层：阻尼吸能材料 #f6ad55",
-        "内层：客舱内饰衬板 #c4f1f9",
-        "当前降噪系数：" + reductionSlider.value + " dB",
-        "状态：" + (isExploded ? "爆炸图展开" : "收拢贴合")
+        "?????" + (clickedLayer.userData.layerLabel || "??????"),
+        "???????????????",
+        "??????? #63b3ed",
+        "????????? #f6ad55",
+        "????????? #c4f1f9",
+        "???????" + reductionSlider.value + " dB",
+        "???" + (isExploded ? "?????" : "????")
       ].join("<br>");
     }
 
@@ -2028,7 +2089,7 @@
       upTween.chain(downTween).start();
     }
 
-    // 噪音数据实时联动
+    // ????????
     function updateNoiseData() {
       const externalNoise = Number(conditionSelect.value);
       const reduction = Number(reductionSlider.value);
@@ -2079,8 +2140,8 @@
       ctx.lineTo(width - paddingRight, paddingTop + chartHeight);
       ctx.stroke();
       const bars = [
-        { label: "无减震壁板", value: externalNoise, colorTop: "#f87171", colorBottom: "#991b1b" },
-        { label: "有减震壁板", value: internalNoise, colorTop: "#68d391", colorBottom: "#047857" }
+        { label: "?????", value: externalNoise, colorTop: "#f87171", colorBottom: "#991b1b" },
+        { label: "?????", value: internalNoise, colorTop: "#68d391", colorBottom: "#047857" }
       ];
       const barWidth = 92;
       const gap = 92;
@@ -2162,6 +2223,10 @@
         const beacon = planeGroup.getObjectByName(name);
         if (beacon) beacon.material.emissiveIntensity = Math.sin(elapsed * 4.4 + index * 0.4) > 0.72 ? 7 : 0.8;
       });
+
+      engineFanRotors.forEach((rotor, index) => {
+        rotor.rotation.z = -(elapsed * (7.5 + index * 0.35));
+      });
     }
 
     function drawEnergyFlow(elapsed) {
@@ -2193,9 +2258,9 @@
         gradient.addColorStop(0, "#fb923c"); gradient.addColorStop(.48, "#facc15"); gradient.addColorStop(1, "#22d3ee");
         ctx.strokeStyle = gradient; ctx.lineWidth = 3 - track * .45; ctx.stroke();
       }
-      ctx.fillStyle = "rgba(251,146,60,.9)"; ctx.font = "bold 22px sans-serif"; ctx.fillText("输入激励", 24, 32);
-      ctx.fillStyle = "rgba(34,211,238,.9)"; ctx.fillText("衰减输出", width - 126, 32);
-      ctx.fillStyle = "rgba(226,232,240,.66)"; ctx.fillText("局域共振 / 阻尼耗能区", width * .41, height - 24);
+      ctx.fillStyle = "rgba(251,146,60,.9)"; ctx.font = "bold 22px sans-serif"; ctx.fillText("????", 24, 32);
+      ctx.fillStyle = "rgba(34,211,238,.9)"; ctx.fillText("????", width - 126, 32);
+      ctx.fillStyle = "rgba(226,232,240,.66)"; ctx.fillText("???? / ?????", width * .41, height - 24);
     }
 
     function animate(time) {

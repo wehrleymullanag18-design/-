@@ -327,6 +327,23 @@
     #leftControls { opacity: 0; pointer-events: none; transform: translateX(-18px); transition: .3s ease; }
     body.manual-mode #leftControls { opacity: 1; pointer-events: auto; transform: none; }
     #manualToggle { position: fixed; left: 22px; bottom: 22px; z-index: 35; border: 1px solid rgba(125,211,252,.25); border-radius: 999px; padding: 10px 15px; color: #bae6fd; background: rgba(3,12,26,.76); backdrop-filter: blur(12px); cursor: pointer; font: 700 12px "Microsoft YaHei", sans-serif; }
+    body.manual-mode { height: 100%; overflow: hidden; }
+    body.manual-mode #topNav,
+    body.manual-mode #story,
+    body.manual-mode #chapterRail,
+    body.manual-mode #performancePanel,
+    body.manual-mode #explosionLegend,
+    body.manual-mode #statusHint,
+    body.manual-mode #viewBadge {
+      visibility: hidden;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+    body.manual-mode #manualToggle {
+      border-color: rgba(56,189,248,.42);
+      color: #e0f2fe;
+      background: rgba(3,30,54,.9);
+    }
     #performancePanel { top: auto; right: 24px; bottom: 24px; width: 304px; max-height: 66vh; opacity: 0; transform: translateX(24px); pointer-events: none; }
     body.data-visible #performancePanel { opacity: 1; transform: none; pointer-events: auto; }
     #explosionLegend { opacity: 0; transform: translateY(12px); transition: .3s ease; pointer-events: none; }
@@ -541,7 +558,7 @@
     </section>
 
     <section id="contact" class="story-section center" data-scene="contact">
-      <article class="story-card wide contact-card"><div class="eyebrow">CO-CREATE THE NEXT CABIN / 10</div><h2>??????????????</h2><p>????????????????????????????????????????????????????</p><a class="cta" href="mailto:business@example.com">?????? ?</a></article>
+      <article class="story-card wide contact-card"><div class="eyebrow">CO-CREATE THE NEXT CABIN / 10</div><h2>??????????????</h2><a class="cta" href="mailto:business@example.com">?????? ?</a></article>
     </section>
   </main>
 
@@ -1708,7 +1725,10 @@
     function initStoryExperience() {
       manualToggle.addEventListener("click", () => {
         document.body.classList.toggle("manual-mode");
-        manualToggle.textContent = document.body.classList.contains("manual-mode") ? "? ????" : "? ????";
+        const isManualMode = document.body.classList.contains("manual-mode");
+        if (isManualMode) autoStoryRunning = false;
+        manualToggle.textContent = isManualMode ? "? ??????" : "? ????";
+        manualToggle.setAttribute("aria-pressed", String(isManualMode));
       });
       autoStoryButton.addEventListener("click", runAutoStory);
       document.querySelectorAll(".flight-tab").forEach((button) => button.addEventListener("click", () => updateFlightStage(button.dataset.stage)));

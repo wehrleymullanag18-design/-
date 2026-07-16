@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "dataStatus": "DEMO",
+  "notice": "演示数据，不代表真实试验或适航结论。请在正式发布前替换。",
+  "units": {
+    "amplitude": "g",
+    "noise": "dB(A)",
+    "reduction": "%"
+  },
+  "stages": {
+    "takeoff": { "normalAmplitude": 1.0, "metaAmplitude": 0.58, "cabinNoise": 71, "reduction": 42, "externalNoise": 105 },
+    "cruise": { "normalAmplitude": 0.56, "metaAmplitude": 0.31, "cabinNoise": 58, "reduction": 45, "externalNoise": 85 },
+    "descent": { "normalAmplitude": 0.71, "metaAmplitude": 0.42, "cabinNoise": 63, "reduction": 41, "externalNoise": 95 },
+    "landing": { "normalAmplitude": 1.18, "metaAmplitude": 0.69, "cabinNoise": 74, "reduction": 42, "externalNoise": 102 }
+  }
+}

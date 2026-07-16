@@ -1,0 +1,2213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>METAPANEL AERO｜航空超材料减震壁板数字孪生</title>
+  <meta name="description" content="面向民用航空器的超材料减震壁板沉浸式 3D 产品展示与数字孪生原型。" />
+  <meta name="theme-color" content="#030712" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23030712'/%3E%3Cpath d='M12 42 30 13l4 18 18-9-20 29-4-18z' fill='%2338bdf8'/%3E%3C/svg%3E" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      background: radial-gradient(circle at 50% 35%, #142742 0%, #07101f 58%, #030712 100%);
+      color: #fff;
+    }
+    #topNav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      background: linear-gradient(90deg, rgba(5, 12, 27, 0.97), rgba(10, 24, 45, 0.94));
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      z-index: 20;
+    }
+    #topNav h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+    }
+    #topNav h1 small {
+      display: block;
+      margin-top: 2px;
+      color: #7dd3fc;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    #navStatus {
+      margin-left: 18px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #9ae6b4;
+      background: rgba(104, 211, 145, 0.12);
+      border: 1px solid rgba(104, 211, 145, 0.28);
+    }
+    #sceneContainer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 60px;
+      bottom: 0;
+      overflow: hidden;
+    }
+    #leftControls {
+      position: fixed;
+      top: 80px;
+      left: 20px;
+      z-index: 25;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 152px;
+    }
+    .controlButton {
+      border: 0;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 10px;
+      padding: 10px 16px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      background: linear-gradient(135deg, rgba(59,130,246,.92), rgba(79,70,229,.92));
+      box-shadow: 0 8px 22px rgba(79, 70, 229, 0.28);
+      transition: transform 0.18s ease, filter 0.18s ease, opacity 0.18s ease;
+    }
+    .controlButton:hover:not(:disabled) {
+      filter: brightness(1.2);
+      transform: translateY(-1px);
+    }
+    .controlButton:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .controlButton.secondary {
+      background: linear-gradient(135deg, #0891b2, #2563eb);
+      box-shadow: 0 8px 22px rgba(8, 145, 178, 0.22);
+    }
+    .controlButton.showcase {
+      background: linear-gradient(135deg, #0f766e, #22c55e);
+      box-shadow: 0 8px 22px rgba(34, 197, 94, 0.22);
+    }
+    .controlButton.utility {
+      color: #cbd5e1;
+      background: rgba(15, 23, 42, .82);
+      box-shadow: none;
+    }
+    #performancePanel {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      width: 320px;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 25;
+      padding: 20px;
+      border-radius: 16px;
+      color: #fff;
+      background: linear-gradient(160deg, rgba(15, 31, 53, .92), rgba(8, 16, 31, .88));
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.36);
+    }
+    #performancePanel::-webkit-scrollbar {
+      width: 6px;
+    }
+    #performancePanel::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: rgba(99, 179, 237, 0.35);
+    }
+    .panelTitle {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 18px;
+      color: #e2e8f0;
+    }
+    .panelSection { margin-bottom: 18px; }
+    .labelRow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+      color: #cbd5e0;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    select, input[type="range"] { width: 100%; }
+    select {
+      height: 36px;
+      border: 1px solid rgba(99, 179, 237, 0.35);
+      border-radius: 6px;
+      padding: 0 10px;
+      color: #fff;
+      background: rgba(17, 24, 39, 0.92);
+      outline: none;
+    }
+    input[type="range"] {
+      accent-color: #63b3ed;
+      cursor: pointer;
+    }
+    .dataGrid {
+      display: grid;
+      gap: 10px;
+    }
+    .metric {
+      padding: 10px 12px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .metricLabel {
+      display: block;
+      margin-bottom: 4px;
+      color: #a0aec0;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .metricValue {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .metricValue.highlight { color: #68d391; }
+    .compareRow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #cbd5e0;
+      font-size: 13px;
+      font-weight: 700;
+      user-select: none;
+      cursor: pointer;
+    }
+    .compareRow input {
+      width: 16px;
+      height: 16px;
+      accent-color: #63b3ed;
+    }
+    #materialInfo {
+      min-height: 72px;
+      padding: 10px 12px;
+      border-radius: 6px;
+      color: #cbd5e0;
+      font-size: 12px;
+      line-height: 1.65;
+      background: rgba(99, 179, 237, 0.08);
+      border: 1px solid rgba(99, 179, 237, 0.22);
+    }
+    #noiseChart {
+      width: 100%;
+      height: 148px;
+      display: block;
+      border-radius: 6px;
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .moduleStatus {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .statusPill {
+      padding: 8px 10px;
+      border-radius: 6px;
+      background: rgba(15, 23, 42, 0.56);
+      border: 1px solid rgba(99, 179, 237, 0.18);
+      color: #cbd5e0;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .statusPill strong {
+      display: block;
+      margin-top: 3px;
+      color: #63b3ed;
+      font-size: 15px;
+    }
+    #explosionLegend {
+      position: fixed;
+      left: 20px;
+      bottom: 24px;
+      z-index: 24;
+      width: 230px;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(99, 179, 237, 0.18);
+      backdrop-filter: blur(8px);
+      color: #cbd5e0;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
+    }
+    .legendTitle {
+      margin-bottom: 9px;
+      color: #e2e8f0;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .legendItem {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 7px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .legendSwatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      box-shadow: 0 0 14px currentColor;
+    }
+    #statusHint {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      z-index: 25;
+      transform: translateX(-50%);
+      padding: 9px 14px;
+      border-radius: 999px;
+      color: #cbd5e0;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(6px);
+      pointer-events: none;
+    }
+    #viewBadge {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      z-index: 24;
+      transform: translateX(-50%);
+      padding: 7px 13px;
+      border: 1px solid rgba(125, 211, 252, .28);
+      border-radius: 999px;
+      color: #bae6fd;
+      background: rgba(3, 12, 26, .68);
+      backdrop-filter: blur(10px);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      pointer-events: none;
+    }
+    body.presentation #topNav { height: 48px; }
+    body.presentation #sceneContainer { top: 48px; }
+    body.presentation #performancePanel { opacity: .12; transform: translateX(265px); }
+    body.presentation #performancePanel:hover { opacity: 1; transform: translateX(0); }
+    #performancePanel { transition: opacity .3s ease, transform .3s ease; }
+
+    /* 沉浸式滚动叙事层 */
+    html { scroll-behavior: smooth; }
+    html, body { height: auto; min-height: 100%; overflow-x: hidden; overflow-y: auto; background: #030712; }
+    #sceneContainer { position: fixed; inset: 0; z-index: 0; }
+    #sceneContainer::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 52% 42%, transparent 18%, rgba(2,6,18,.28) 62%, rgba(2,6,18,.78) 100%); }
+    #topNav { height: 66px; padding: 0 28px; }
+    #topNav h1 { min-width: 350px; }
+    #navLinks { display: flex; gap: 5px; margin-left: auto; }
+    #navLinks a { padding: 9px 11px; border-radius: 8px; color: #94a3b8; text-decoration: none; font-size: 11px; font-weight: 700; letter-spacing: .04em; transition: .25s ease; }
+    #navLinks a:hover, #navLinks a.active { color: #e0f2fe; background: rgba(14,165,233,.12); }
+    #navStatus { margin-left: 14px; }
+    #leftControls { opacity: 0; pointer-events: none; transform: translateX(-18px); transition: .3s ease; }
+    body.manual-mode #leftControls { opacity: 1; pointer-events: auto; transform: none; }
+    #manualToggle { position: fixed; left: 22px; bottom: 22px; z-index: 35; border: 1px solid rgba(125,211,252,.25); border-radius: 999px; padding: 10px 15px; color: #bae6fd; background: rgba(3,12,26,.76); backdrop-filter: blur(12px); cursor: pointer; font: 700 12px "Microsoft YaHei", sans-serif; }
+    #performancePanel { top: auto; right: 24px; bottom: 24px; width: 304px; max-height: 66vh; opacity: 0; transform: translateX(24px); pointer-events: none; }
+    body.data-visible #performancePanel { opacity: 1; transform: none; pointer-events: auto; }
+    #explosionLegend { opacity: 0; transform: translateY(12px); transition: .3s ease; pointer-events: none; }
+    body.explosion-visible #explosionLegend { opacity: 1; transform: none; }
+    #statusHint { bottom: 24px; opacity: .78; }
+    #viewBadge { top: 82px; }
+    #story { position: relative; z-index: 5; }
+    .story-section { min-height: 112vh; display: flex; align-items: center; padding: 10vh clamp(24px, 7vw, 120px); pointer-events: none; }
+    .story-section.right { justify-content: flex-end; }
+    .story-section.center { justify-content: center; text-align: center; }
+    .story-card { width: min(520px, 88vw); padding: 28px 30px; border: 1px solid rgba(148,163,184,.16); border-radius: 18px; background: linear-gradient(145deg, rgba(5,14,30,.83), rgba(15,34,56,.62)); box-shadow: 0 28px 80px rgba(0,0,0,.36); backdrop-filter: blur(18px); pointer-events: auto; }
+    .story-card.wide { width: min(820px, 92vw); }
+    .eyebrow { margin-bottom: 12px; color: #38bdf8; font: 800 11px/1.2 Arial, sans-serif; letter-spacing: .18em; text-transform: uppercase; }
+    .story-card h2 { margin-bottom: 15px; color: #f8fafc; font-size: clamp(27px, 3.2vw, 50px); line-height: 1.08; letter-spacing: -.035em; }
+    .story-card p { color: #a9b8cc; font-size: 14px; line-height: 1.85; }
+    .hero-card { width: min(760px, 92vw); margin-top: 8vh; border: 0; background: transparent; box-shadow: none; backdrop-filter: none; }
+    .hero-card h2 { font-size: clamp(44px, 7vw, 94px); max-width: 760px; }
+    .hero-card p { max-width: 580px; color: #cbd5e1; font-size: 16px; }
+    .hero-actions { display: flex; gap: 12px; margin-top: 26px; }
+    .cta { display: inline-flex; align-items: center; gap: 9px; padding: 12px 18px; border: 1px solid rgba(125,211,252,.35); border-radius: 10px; color: #e0f2fe; background: linear-gradient(135deg, #0369a1, #2563eb); text-decoration: none; font-size: 13px; font-weight: 800; }
+    .cta.ghost { color: #bae6fd; background: rgba(3,12,26,.6); }
+    .micro-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 22px; }
+    .micro-stat { padding: 13px; border: 1px solid rgba(125,211,252,.13); border-radius: 11px; background: rgba(8,20,38,.65); }
+    .micro-stat strong { display: block; color: #7dd3fc; font-size: 20px; }
+    .micro-stat span { color: #718096; font-size: 10px; }
+    .layer-list { display: grid; gap: 8px; margin-top: 20px; }
+    .layer-item { display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: 10px; padding: 10px; border-radius: 9px; color: #cbd5e1; background: rgba(15,31,52,.66); font-size: 12px; }
+    .layer-item i { width: 9px; height: 9px; margin: auto; border-radius: 50%; background: var(--c); box-shadow: 0 0 16px var(--c); }
+    .layer-item em { color: #64748b; font-style: normal; font-size: 10px; }
+    #energyCanvas { width: 100%; height: 190px; margin-top: 18px; border: 1px solid rgba(56,189,248,.16); border-radius: 12px; background: rgba(2,8,20,.72); }
+    .compare-shell { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+    .compare-cell { position: relative; min-height: 180px; padding: 16px; overflow: hidden; border: 1px solid rgba(148,163,184,.13); border-radius: 12px; background: rgba(3,11,24,.74); }
+    .compare-cell h3 { color: #e2e8f0; font-size: 13px; }
+    .heat { position: absolute; inset: 48px 12px 34px; border-radius: 10px; opacity: .85; background: repeating-radial-gradient(circle at 50% 50%, rgba(248,113,113,.8) 0 4px, rgba(249,115,22,.28) 8px 15px, transparent 20px 32px); animation: resonate 1.1s ease-in-out infinite alternate; }
+    .compare-cell.meta .heat { background: repeating-radial-gradient(circle at 50% 50%, rgba(34,211,238,.72) 0 3px, rgba(14,116,144,.18) 8px 12px, transparent 15px 31px); animation-duration: 2.1s; transform: scale(.66); }
+    .compare-value { position: absolute; left: 16px; bottom: 12px; color: #f8fafc; font-size: 22px; font-weight: 900; }
+    .demo-tag { display: inline-flex; margin-left: 8px; padding: 3px 7px; border-radius: 999px; color: #fdba74; background: rgba(249,115,22,.12); font-size: 9px; vertical-align: middle; }
+    @keyframes resonate { to { transform: scale(1.12); filter: saturate(1.35) brightness(1.15); } }
+    .flight-tabs { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-top: 20px; }
+    .flight-tab { padding: 11px 8px; border: 1px solid rgba(148,163,184,.14); border-radius: 9px; color: #94a3b8; background: rgba(8,19,36,.76); cursor: pointer; font: 700 11px sans-serif; }
+    .flight-tab.active { color: #e0f2fe; border-color: rgba(56,189,248,.5); background: rgba(3,105,161,.28); }
+    .flight-readout { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-top: 10px; }
+    .flight-readout div { padding: 12px; border-radius: 9px; background: rgba(3,11,24,.68); }
+    .flight-readout small { display: block; color: #64748b; font-size: 9px; }
+    .flight-readout strong { color: #67e8f9; font-size: 18px; }
+    .value-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 20px; }
+    .value-card { padding: 18px; border: 1px solid rgba(56,189,248,.14); border-radius: 12px; background: rgba(3,11,24,.7); }
+    .value-card strong { display: block; color: #7dd3fc; font-size: 26px; }
+    .value-card span { color: #94a3b8; font-size: 11px; }
+    .contact-card { text-align: center; }
+    .contact-card .cta { margin-top: 24px; }
+    #chapterRail { position: fixed; right: 17px; top: 50%; z-index: 30; display: grid; gap: 8px; transform: translateY(-50%); }
+    #chapterRail a { width: 5px; height: 20px; border-radius: 99px; background: rgba(148,163,184,.25); transition: .25s; }
+    #chapterRail a.active { height: 34px; background: #38bdf8; box-shadow: 0 0 15px rgba(56,189,248,.7); }
+    @media (max-width: 980px) { #navLinks { display:none; } #performancePanel { width: 280px; } .story-section { padding-inline: 22px; } }
+    @media (max-width: 680px) { #topNav h1 { min-width: 0; font-size: 14px; } #navStatus, #viewBadge, #statusHint { display:none; } .story-section, .story-section.right { min-height: 104vh; align-items: flex-end; justify-content: center; padding: 80px 14px 28px; } .story-card { padding: 20px; } .hero-card h2 { font-size: 42px; } .micro-grid, .value-grid { grid-template-columns: 1fr; } .compare-shell { grid-template-columns: 1fr 1fr; } .flight-tabs, .flight-readout { grid-template-columns: repeat(2,1fr); } #chapterRail { right: 7px; } #performancePanel { display:none; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; } }
+    #loader { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: #020611; transition: opacity .55s ease; }
+    #loader.done { opacity: 0; pointer-events: none; }
+    .loader-core { width: min(420px, 82vw); text-align: center; }
+    .loader-mark { margin-bottom: 16px; color: #e0f2fe; font: 900 22px Arial,sans-serif; letter-spacing: .22em; }
+    .loader-track { height: 2px; overflow: hidden; background: rgba(125,211,252,.13); }
+    .loader-track i { display:block; width: 100%; height:100%; transform-origin:left; background:#38bdf8; animation: loadline 1.15s cubic-bezier(.2,.8,.2,1); }
+    .loader-core small { display:block; margin-top:12px; color:#64748b; font: 10px Arial,sans-serif; letter-spacing:.16em; }
+    @keyframes loadline { from { transform:scaleX(0); } }
+    @media (max-width: 820px) {
+      #performancePanel {
+        right: 10px;
+        width: 290px;
+        padding: 16px;
+      }
+      #leftControls {
+        left: 10px;
+        width: 128px;
+      }
+      #topNav h1 { font-size: 17px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="loader"><div class="loader-core"><div class="loader-mark">METAPANEL AERO</div><div class="loader-track"><i></i></div><small>INITIALIZING DIGITAL TWIN</small></div></div>
+  <nav id="topNav">
+    <h1>METAPANEL AERO<small>航空超材料减震系统 · DIGITAL TWIN</small></h1>
+    <div id="navLinks">
+      <a href="#hero">概览</a><a href="#aircraft">整机</a><a href="#installation">安装</a><a href="#explosion">结构</a><a href="#principle">原理</a><a href="#comparison">对比</a><a href="#flight">工况</a><a href="#contact">合作</a>
+    </div>
+    <div id="navStatus">系统待命</div>
+  </nav>
+  <div id="sceneContainer"></div>
+  <div id="leftControls">
+    <button id="splitButton" class="controlButton">拆分后机身</button>
+    <button id="resetButton" class="controlButton">复位机身</button>
+    <button id="explodeButton" class="controlButton secondary">壁板爆炸图</button>
+    <button id="implodeButton" class="controlButton secondary">收拢壁板</button>
+    <button id="showcaseButton" class="controlButton showcase">自动演示</button>
+    <button id="explosionViewButton" class="controlButton secondary">爆炸全景</button>
+    <button id="overviewButton" class="controlButton">整体视角</button>
+    <button id="rearViewButton" class="controlButton">后段特写</button>
+    <button id="insideViewButton" class="controlButton">内部视角</button>
+    <button id="orbitButton" class="controlButton utility">环绕巡检</button>
+    <button id="xrayButton" class="controlButton utility">机身透视</button>
+    <button id="fullscreenButton" class="controlButton utility">全屏演示</button>
+  </div>
+  <aside id="performancePanel">
+    <div class="panelTitle">性能测试面板</div>
+    <div class="panelSection">
+      <div class="labelRow"><span>工况选择</span></div>
+      <select id="conditionSelect">
+        <option value="85">巡航（外部 85dB）</option>
+        <option value="105">起飞（外部 105dB）</option>
+        <option value="95">降落（外部 95dB）</option>
+      </select>
+    </div>
+    <div class="panelSection">
+      <div class="labelRow">
+        <span>减震壁板降噪系数</span>
+        <span id="reductionLabel">25 dB</span>
+      </div>
+      <input id="reductionSlider" type="range" min="15" max="35" value="25" step="1" />
+    </div>
+    <div class="panelSection dataGrid">
+      <div class="metric">
+        <span class="metricLabel">机舱外部噪音</span>
+        <span id="externalNoiseValue" class="metricValue">85 dB</span>
+      </div>
+      <div class="metric">
+        <span class="metricLabel">机舱内部噪音</span>
+        <span id="internalNoiseValue" class="metricValue">60 dB</span>
+      </div>
+      <div class="metric">
+        <span class="metricLabel">降噪差值</span>
+        <span id="differenceValue" class="metricValue highlight">25 dB</span>
+      </div>
+      <div id="noDampingMetric" class="metric" style="display: none;">
+        <span class="metricLabel">无减震内部噪音</span>
+        <span id="noDampingValue" class="metricValue">85 dB</span>
+      </div>
+    </div>
+    <div class="panelSection">
+      <label class="compareRow">
+        <input id="compareCheckbox" type="checkbox" />
+        <span>显示无减震对比</span>
+      </label>
+    </div>
+    <div class="panelSection">
+      <div class="labelRow"><span>减震壁板材料参数</span></div>
+      <div id="materialInfo">拆分后点击淡蓝色减震壁板，可查看材料基础参数。</div>
+      <div class="moduleStatus">
+        <div class="statusPill">机身状态<strong id="splitStateText">未拆分</strong></div>
+        <div class="statusPill">壁板状态<strong id="panelStateText">收拢</strong></div>
+      </div>
+    </div>
+    <canvas id="noiseChart" width="560" height="320"></canvas>
+  </aside>
+  <div id="explosionLegend">
+    <div class="legendTitle">壁板爆炸图层级</div>
+    <div class="legendItem"><span class="legendSwatch" style="color:#63b3ed;background:#63b3ed;"></span>外侧隔声面板</div>
+    <div class="legendItem"><span class="legendSwatch" style="color:#f6ad55;background:#f6ad55;"></span>阻尼吸能芯层</div>
+    <div class="legendItem"><span class="legendSwatch" style="color:#c4f1f9;background:#c4f1f9;"></span>客舱内饰衬板</div>
+  </div>
+  <div id="statusHint">拖拽旋转视角，滚轮缩放；拆分后可点击减震壁板</div>
+  <div id="viewBadge">整体构型 · OVERVIEW</div>
+  <button id="manualToggle" type="button">◫ 手动探索</button>
+  <nav id="chapterRail" aria-label="章节导航">
+    <a href="#hero" aria-label="开场"></a><a href="#value" aria-label="价值"></a><a href="#aircraft" aria-label="整机"></a><a href="#installation" aria-label="安装位置"></a><a href="#explosion" aria-label="爆炸图"></a><a href="#principle" aria-label="原理"></a><a href="#comparison" aria-label="对比"></a><a href="#flight" aria-label="飞行阶段"></a><a href="#performance" aria-label="性能"></a><a href="#contact" aria-label="合作"></a>
+  </nav>
+
+  <main id="story">
+    <section id="hero" class="story-section" data-scene="hero">
+      <article class="story-card hero-card">
+        <div class="eyebrow">AEROSPACE METAMATERIAL SYSTEM / 01</div>
+        <h2>让振动止于<br>结构之内</h2>
+        <p>面向民用航空器的超材料减震壁板，以可设计的局域共振单元重构振动传播路径，在重量、空间与客舱舒适性之间建立新的工程平衡。</p>
+        <div class="hero-actions"><a class="cta" href="#aircraft">探索技术 ↓</a><button class="cta ghost" id="autoStoryButton" type="button">▶ 自动演示</button></div>
+      </article>
+    </section>
+
+    <section id="value" class="story-section right" data-scene="value">
+      <article class="story-card">
+        <div class="eyebrow">PRODUCT VALUE / 02</div><h2>不是隔绝噪声，<br>而是管理能量</h2>
+        <p>在振动进入客舱之前，通过周期性结构、阻尼界面与多层承载体系形成针对性衰减。原型数值为演示数据，保留真实试验数据替换接口。</p>
+        <div class="micro-grid"><div class="micro-stat"><strong>−42%</strong><span>振动响应 · DEMO</span></div><div class="micro-stat"><strong>−12 dB</strong><span>关键频段 · DEMO</span></div><div class="micro-stat"><strong>4 stages</strong><span>全飞行阶段覆盖</span></div></div>
+      </article>
+    </section>
+
+    <section id="aircraft" class="story-section" data-scene="aircraft">
+      <article class="story-card"><div class="eyebrow">AIRCRAFT DIGITAL TWIN / 03</div><h2>A320 级窄体客机应用场景</h2><p>程序化近似模型用于原型展示：包含流线机身、后掠翼、发动机、起落架、航行灯、舱门、客舱窗与内部框架。可拖拽旋转、滚轮缩放，并在手动探索模式中切换视角。</p><div class="layer-list"><div class="layer-item"><i style="--c:#38bdf8"></i><span>飞机级数字孪生</span><em>INTERACTIVE</em></div><div class="layer-item"><i style="--c:#22c55e"></i><span>内部承载框架</span><em>STRUCTURE</em></div><div class="layer-item"><i style="--c:#fb923c"></i><span>壁板安装区域</span><em>HIGHLIGHT</em></div></div></article>
+    </section>
+
+    <section id="installation" class="story-section right" data-scene="installation">
+      <article class="story-card"><div class="eyebrow">INSTALLATION ZONE / 04</div><h2>从整机，精确定位到后客舱</h2><p>镜头跟随后机身分离，蒙皮透明度降低，环框、纵梁与地板结构显现。青色扫描光标定超材料壁板沿侧壁和顶部的安装位置。</p><div class="micro-grid"><div class="micro-stat"><strong>3</strong><span>模块化区域</span></div><div class="micro-stat"><strong>360°</strong><span>自由观察</span></div><div class="micro-stat"><strong>1 click</strong><span>复原/拆解</span></div></div></article>
+    </section>
+
+    <section id="explosion" class="story-section" data-scene="explosion">
+      <article class="story-card"><div class="eyebrow">ENGINEERED EXPLOSION / 05</div><h2>五层结构，按工程秩序展开</h2><p>原型以三层可视模型承载五层工程语义；正式 CAD/GLB 接入后可直接扩展为完整层级，不改变镜头与交互接口。</p><div class="layer-list"><div class="layer-item"><i style="--c:#60a5fa"></i><span>表层蒙皮 / 隔声面板</span><em>AL-LI / CFRP</em></div><div class="layer-item"><i style="--c:#94a3b8"></i><span>承载结构</span><em>LOAD PATH</em></div><div class="layer-item"><i style="--c:#fb923c"></i><span>超材料减震单元</span><em>RESONATOR</em></div><div class="layer-item"><i style="--c:#22d3ee"></i><span>隔振层</span><em>VISCOELASTIC</em></div><div class="layer-item"><i style="--c:#e2e8f0"></i><span>连接与内饰层</span><em>INTERFACE</em></div></div></article>
+    </section>
+
+    <section id="principle" class="story-section right" data-scene="principle">
+      <article class="story-card"><div class="eyebrow">ENERGY PATH / 06</div><h2>看见振动如何被分散与衰减</h2><p>橙色代表输入能量，青色代表经局域共振和阻尼界面重分配后的低能响应。动画仅用于原理说明，不代表真实有限元结果。</p><canvas id="energyCanvas" width="900" height="320" aria-label="振动能量传播演示"></canvas></article>
+    </section>
+
+    <section id="comparison" class="story-section center" data-scene="comparison">
+      <article class="story-card wide"><div class="eyebrow">A/B LABORATORY / 07</div><h2>相同激励，不同结构响应 <span class="demo-tag">演示数据</span></h2><p>两侧采用相同激励条件。热力场、振幅和噪声数值随飞行工况同步更新，数据源可替换为试验 CSV/JSON 或后端 API。</p><div class="compare-shell"><div class="compare-cell"><h3>普通航空壁板</h3><div class="heat"></div><span id="normalCompareValue" class="compare-value">1.00 g</span></div><div class="compare-cell meta"><h3>超材料减震壁板</h3><div class="heat"></div><span id="metaCompareValue" class="compare-value">0.58 g</span></div></div></article>
+    </section>
+
+    <section id="flight" class="story-section right" data-scene="flight">
+      <article class="story-card wide"><div class="eyebrow">FLIGHT ENVELOPE / 08</div><h2>覆盖完整飞行阶段</h2><p>场景姿态、灯光、激励强度和数据面板同步变化。点击阶段可暂停滚动叙事并查看对应演示指标。</p><div class="flight-tabs"><button class="flight-tab active" data-stage="takeoff">起飞</button><button class="flight-tab" data-stage="cruise">爬升与巡航</button><button class="flight-tab" data-stage="descent">下降</button><button class="flight-tab" data-stage="landing">着陆</button></div><div class="flight-readout"><div><small>普通壁板振幅</small><strong id="flightNormal">1.00 g</strong></div><div><small>超材料壁板</small><strong id="flightMeta">0.58 g</strong></div><div><small>客舱噪声</small><strong id="flightNoise">71 dB</strong></div><div><small>衰减率</small><strong id="flightReduction">42%</strong></div></div></article>
+    </section>
+
+    <section id="performance" class="story-section" data-scene="performance">
+      <article class="story-card wide"><div class="eyebrow">ENGINEERING VALUE / 09</div><h2>把舒适性转化为可验证指标</h2><p>所有数字均以“DEMO”标记，并通过独立 JSON 数据层管理。后续接入试验数据时无需改动 3D 场景逻辑。</p><div class="value-grid"><div class="value-card"><strong>15–35 dB</strong><span>交互式降噪区间 · DEMO</span></div><div class="value-card"><strong>−42%</strong><span>峰值响应变化 · DEMO</span></div><div class="value-card"><strong>4 modes</strong><span>飞行工况数字孪生</span></div><div class="value-card"><strong>GLB ready</strong><span>真实 CAD 模型替换接口</span></div><div class="value-card"><strong>60 FPS</strong><span>桌面目标帧率</span></div><div class="value-card"><strong>Adaptive</strong><span>移动端自动降级</span></div></div></article>
+    </section>
+
+    <section id="contact" class="story-section center" data-scene="contact">
+      <article class="story-card wide contact-card"><div class="eyebrow">CO-CREATE THE NEXT CABIN / 10</div><h2>让下一代客舱，更安静，也更轻</h2><p>支持联合仿真、样件验证、机型适配与适航工程协同。请在正式上线前替换品牌信息、真实试验数据和业务联系方式。</p><a class="cta" href="mailto:business@example.com">发起技术合作 →</a></article>
+    </section>
+  </main>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+        "@tweenjs/tween.js": "https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@23.1.2/dist/tween.esm.js"
+      }
+    }
+  </script>
+  <script type="module">
+    import * as THREE from "three";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+    import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+    import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
+    import { Tween, Easing, update as updateTween } from "@tweenjs/tween.js";
+
+    const sceneContainer = document.getElementById("sceneContainer");
+    const navStatus = document.getElementById("navStatus");
+    const splitButton = document.getElementById("splitButton");
+    const resetButton = document.getElementById("resetButton");
+    const explodeButton = document.getElementById("explodeButton");
+    const implodeButton = document.getElementById("implodeButton");
+    const showcaseButton = document.getElementById("showcaseButton");
+    const explosionViewButton = document.getElementById("explosionViewButton");
+    const overviewButton = document.getElementById("overviewButton");
+    const rearViewButton = document.getElementById("rearViewButton");
+    const insideViewButton = document.getElementById("insideViewButton");
+    const orbitButton = document.getElementById("orbitButton");
+    const xrayButton = document.getElementById("xrayButton");
+    const fullscreenButton = document.getElementById("fullscreenButton");
+    const viewBadge = document.getElementById("viewBadge");
+    const conditionSelect = document.getElementById("conditionSelect");
+    const reductionSlider = document.getElementById("reductionSlider");
+    const reductionLabel = document.getElementById("reductionLabel");
+    const externalNoiseValue = document.getElementById("externalNoiseValue");
+    const internalNoiseValue = document.getElementById("internalNoiseValue");
+    const differenceValue = document.getElementById("differenceValue");
+    const compareCheckbox = document.getElementById("compareCheckbox");
+    const noDampingMetric = document.getElementById("noDampingMetric");
+    const noDampingValue = document.getElementById("noDampingValue");
+    const materialInfo = document.getElementById("materialInfo");
+    const splitStateText = document.getElementById("splitStateText");
+    const panelStateText = document.getElementById("panelStateText");
+    const chartCanvas = document.getElementById("noiseChart");
+    const chartContext = chartCanvas.getContext("2d");
+    const energyCanvas = document.getElementById("energyCanvas");
+    const energyContext = energyCanvas.getContext("2d");
+    const manualToggle = document.getElementById("manualToggle");
+    const autoStoryButton = document.getElementById("autoStoryButton");
+
+    let scene, camera, renderer, controls, raycaster, pointer;
+    let isSplit = false;
+    let isExploded = false;
+    let isAnimating = false;
+    let isShowcaseRunning = false;
+    let isOrbiting = false;
+    let isXray = false;
+    let activeStoryScene = "";
+    let pendingStoryScene = null;
+    let storyTransitionRunning = false;
+    let autoStoryRunning = false;
+    let dampingPanels = [];
+    let panelModules = [];
+    let connectorLines = [];
+    let scanBeam;
+    let pulseRings = [];
+    let sceneClock;
+    let dampingPanelMaterial;
+    let originalPanelColor;
+    let originalPanelOpacity;
+
+    const defaultCameraPosition = new THREE.Vector3(30, 15, 40);
+    const defaultTarget = new THREE.Vector3(0, 0, 0);
+    const planeGroup = new THREE.Group();
+    planeGroup.name = "planeGroup";
+    const fuselageMainGroup = new THREE.Group();
+    fuselageMainGroup.name = "fuselageMainGroup";
+    const wingGroup = new THREE.Group();
+    wingGroup.name = "wingGroup";
+    const internalFrameGroup = new THREE.Group();
+    internalFrameGroup.name = "internalFrameGroup";
+    const rearFuselageGroup = new THREE.Group();
+    rearFuselageGroup.name = "rearFuselageGroup";
+    const landingGearGroup = new THREE.Group();
+    landingGearGroup.name = "landingGearGroup";
+
+    const fallbackPerformanceData = {
+      dataStatus: "DEMO",
+      stages: {
+        takeoff: { normalAmplitude: 1.00, metaAmplitude: 0.58, cabinNoise: 71, reduction: 42, externalNoise: 105 },
+        cruise: { normalAmplitude: 0.56, metaAmplitude: 0.31, cabinNoise: 58, reduction: 45, externalNoise: 85 },
+        descent: { normalAmplitude: 0.71, metaAmplitude: 0.42, cabinNoise: 63, reduction: 41, externalNoise: 95 },
+        landing: { normalAmplitude: 1.18, metaAmplitude: 0.69, cabinNoise: 74, reduction: 42, externalNoise: 102 }
+      }
+    };
+    let performanceData = fallbackPerformanceData;
+
+    const materials = {
+      fuselage: new THREE.MeshStandardMaterial({
+        color: 0xf8fafc,
+        metalness: 0.28,
+        roughness: 0.32,
+        envMapIntensity: 0.75
+      }),
+      fuselageTransparent: new THREE.MeshStandardMaterial({
+        color: 0xf8fafc,
+        metalness: 0.28,
+        roughness: 0.36,
+        transparent: true,
+        opacity: 0.38,
+        side: THREE.DoubleSide
+      }),
+      frame: new THREE.MeshStandardMaterial({ color: 0x4a5568, metalness: 0.25, roughness: 0.65 }),
+      gear: new THREE.MeshStandardMaterial({ color: 0x2d3748, metalness: 0.35, roughness: 0.55 }),
+      tire: new THREE.MeshStandardMaterial({ color: 0x111827, metalness: 0.1, roughness: 0.75 }),
+      glass: new THREE.MeshStandardMaterial({
+        color: 0x0f172a,
+        transparent: true,
+        opacity: 0.88,
+        metalness: 0.18,
+        roughness: 0.12
+      }),
+      liveryBlue: new THREE.MeshStandardMaterial({ color: 0x1d4ed8, metalness: 0.12, roughness: 0.42 }),
+      liveryRed: new THREE.MeshStandardMaterial({ color: 0xe11d48, metalness: 0.12, roughness: 0.42 }),
+      doorLine: new THREE.MeshStandardMaterial({ color: 0x1f2937, metalness: 0.05, roughness: 0.5 }),
+      engineInterior: new THREE.MeshStandardMaterial({ color: 0x0b1120, metalness: 0.55, roughness: 0.26 }),
+      fanBlade: new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.68, roughness: 0.3 }),
+      dampingCore: new THREE.MeshStandardMaterial({
+        color: 0xf6ad55,
+        transparent: true,
+        opacity: 0.78,
+        roughness: 0.32,
+        metalness: 0.04,
+        side: THREE.DoubleSide,
+        emissive: 0x3a1e05,
+        emissiveIntensity: 0.12
+      }),
+      cabinLiner: new THREE.MeshStandardMaterial({
+        color: 0xc4f1f9,
+        transparent: true,
+        opacity: 0.72,
+        roughness: 0.24,
+        metalness: 0.08,
+        side: THREE.DoubleSide,
+        emissive: 0x0b3340,
+        emissiveIntensity: 0.1
+      }),
+      cyanLine: new THREE.LineBasicMaterial({
+        color: 0x63b3ed,
+        transparent: true,
+        opacity: 0.7
+      })
+    };
+
+    dampingPanelMaterial = new THREE.MeshStandardMaterial({
+      color: 0x63b3ed,
+      transparent: true,
+      opacity: 0.7,
+      metalness: 0.08,
+      roughness: 0.25,
+      side: THREE.DoubleSide,
+      emissive: 0x0f3554,
+      emissiveIntensity: 0.2
+    });
+    originalPanelColor = dampingPanelMaterial.color.clone();
+    originalPanelOpacity = dampingPanelMaterial.opacity;
+
+    init();
+
+    function init() {
+      try {
+        initScene();
+        createLighting();
+        createGridGround();
+        createAircraftModel();
+        loadConfiguredAircraftModel();
+        initControls();
+        bindEvents();
+        initStoryExperience();
+        loadPerformanceData();
+        updateNoiseData();
+        animate();
+        requestAnimationFrame(() => setTimeout(() => document.getElementById("loader").classList.add("done"), 650));
+      } catch (error) {
+        document.getElementById("statusHint").textContent = "初始化失败，请检查浏览器 WebGL 支持。";
+        document.querySelector("#loader small").textContent = "WEBGL INITIALIZATION FAILED · 已切换为内容浏览模式";
+        setTimeout(() => document.getElementById("loader").classList.add("done"), 1600);
+        console.error(error);
+      }
+    }
+
+    // 场景、相机与渲染器基础配置
+    function initScene() {
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x1a1a2e);
+      const width = sceneContainer.clientWidth;
+      const height = sceneContainer.clientHeight;
+      camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 1000);
+      camera.position.copy(defaultCameraPosition);
+      camera.lookAt(defaultTarget);
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.08;
+      const lowPowerDevice = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) || (navigator.deviceMemory && navigator.deviceMemory <= 4);
+      if (lowPowerDevice || window.innerWidth < 720) {
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25));
+        renderer.shadowMap.enabled = false;
+        document.body.dataset.quality = "reduced";
+      }
+      sceneContainer.appendChild(renderer.domElement);
+      raycaster = new THREE.Raycaster();
+      pointer = new THREE.Vector2();
+      sceneClock = new THREE.Clock();
+    }
+
+    function createLighting() {
+      scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+      const directionalLightA = new THREE.DirectionalLight(0xffffff, 0.8);
+      directionalLightA.position.set(25, 35, 20);
+      directionalLightA.castShadow = true;
+      directionalLightA.shadow.mapSize.set(2048, 2048);
+      directionalLightA.shadow.camera.near = 1;
+      directionalLightA.shadow.camera.far = 120;
+      directionalLightA.shadow.camera.left = -60;
+      directionalLightA.shadow.camera.right = 60;
+      directionalLightA.shadow.camera.top = 60;
+      directionalLightA.shadow.camera.bottom = -60;
+      scene.add(directionalLightA);
+      const directionalLightB = new THREE.DirectionalLight(0xdbeafe, 0.8);
+      directionalLightB.position.set(-22, 28, -26);
+      directionalLightB.castShadow = true;
+      scene.add(directionalLightB);
+    }
+
+    function createGridGround() {
+      const grid = new THREE.GridHelper(200, 80, 0x4a5568, 0x4a5568);
+      grid.material.transparent = true;
+      grid.material.opacity = 0.38;
+      grid.position.y = -4;
+      scene.add(grid);
+    }
+
+    // 飞机模型严格归入 planeGroup 与 5 个命名子组
+    function createAircraftModel() {
+      planeGroup.add(fuselageMainGroup, wingGroup, internalFrameGroup, rearFuselageGroup, landingGearGroup);
+      scene.add(planeGroup);
+      createMainFuselage();
+      createRearFuselage();
+      createWingsAndTail();
+      createInternalFrame();
+      createLandingGear();
+      createAircraftDetails();
+    }
+
+    // 真实 GLB 替换接口：设置 window.METAPANEL_CONFIG.aircraftModelUrl 即可启用。
+    function loadConfiguredAircraftModel() {
+      const url = window.METAPANEL_CONFIG && window.METAPANEL_CONFIG.aircraftModelUrl;
+      if (!url) return;
+      const draco = new DRACOLoader();
+      draco.setDecoderPath("https://unpkg.com/three@0.160.0/examples/jsm/libs/draco/");
+      const loader = new GLTFLoader();
+      loader.setDRACOLoader(draco);
+      loader.load(url, (gltf) => {
+        const externalModel = gltf.scene;
+        externalModel.name = "licensedExternalAircraftModel";
+        externalModel.traverse((node) => {
+          if (node.isMesh) { node.castShadow = true; node.receiveShadow = true; }
+        });
+        planeGroup.visible = false;
+        scene.add(externalModel);
+        navStatus.textContent = "授权机型模型已加载";
+      }, (event) => {
+        if (event.total) navStatus.textContent = "模型加载 " + Math.round(event.loaded / event.total * 100) + "%";
+      }, () => {
+        planeGroup.visible = true;
+        navStatus.textContent = "外部模型不可用，已使用程序化机型";
+      });
+    }
+
+    function createMainFuselage() {
+      const mainBody = createFuselageSection([
+        [0.08, -20.2],
+        [0.65, -19.65],
+        [1.55, -18.7],
+        [2.35, -17.25],
+        [2.78, -15.25],
+        [2.9, -11.5],
+        [2.9, 7.2]
+      ], materials.fuselage);
+      mainBody.name = "mainFuselageStreamlinedShell";
+      fuselageMainGroup.add(mainBody);
+
+      createCockpitWindows(fuselageMainGroup);
+      createFuselageLivery(fuselageMainGroup, "main");
+      createPassengerWindows(fuselageMainGroup, -14.0, 5.8, 21);
+      createDoor(-2.92, -16.0, "frontLeftDoor", fuselageMainGroup);
+      createDoor(2.92, -16.0, "frontRightDoor", fuselageMainGroup);
+      createDoor(-2.92, 4.9, "overWingLeftDoor", fuselageMainGroup);
+      createDoor(2.92, 4.9, "overWingRightDoor", fuselageMainGroup);
+      createBellyLine(fuselageMainGroup, -18.0, 7.0);
+    }
+
+    function createRearFuselage() {
+      const rearSkin = createFuselageSection([
+        [2.9, 7.0],
+        [2.88, 12.5],
+        [2.62, 17.6],
+        [2.12, 21.0],
+        [1.25, 23.8],
+        [0.22, 25.2]
+      ], materials.fuselageTransparent);
+      rearSkin.name = "rearOuterSkin";
+      rearFuselageGroup.add(rearSkin);
+      createPassengerWindows(rearFuselageGroup, 7.9, 18.8, 12);
+      createDoor(-2.78, 19.2, "rearLeftDoor", rearFuselageGroup);
+      createDoor(2.78, 19.2, "rearRightDoor", rearFuselageGroup);
+      createFuselageLivery(rearFuselageGroup, "rear");
+      createBellyLine(rearFuselageGroup, 7.2, 22.6);
+      createDampingPanels();
+      createAdvancedRearEffects();
+      createRearInternalFrame();
+    }
+
+    function createFuselageSection(profile, material) {
+      const points = profile.map(([radius, z]) => new THREE.Vector2(radius, z));
+      const geometry = new THREE.LatheGeometry(points, 96);
+      geometry.rotateX(Math.PI / 2);
+      geometry.computeVertexNormals();
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      return mesh;
+    }
+
+    function createCockpitWindows(parent) {
+      const glassGroup = new THREE.Group();
+      glassGroup.name = "a320CockpitWindowGroup";
+      const panes = [
+        { x: -0.82, y: 1.72, z: -18.18, rz: 0.18, sx: 0.62 },
+        { x: -0.28, y: 1.83, z: -18.42, rz: 0.05, sx: 0.52 },
+        { x: 0.28, y: 1.83, z: -18.42, rz: -0.05, sx: 0.52 },
+        { x: 0.82, y: 1.72, z: -18.18, rz: -0.18, sx: 0.62 }
+      ];
+      panes.forEach((pane, index) => {
+        const windowMesh = new THREE.Mesh(new THREE.BoxGeometry(pane.sx, 0.04, 0.34), materials.glass);
+        windowMesh.name = "cockpitGlassPane" + index;
+        windowMesh.position.set(pane.x, pane.y, pane.z);
+        windowMesh.rotation.x = -0.44;
+        windowMesh.rotation.z = pane.rz;
+        glassGroup.add(windowMesh);
+      });
+      parent.add(glassGroup);
+    }
+
+    function createPassengerWindows(parent, zStart, zEnd, count) {
+      for (let i = 0; i < count; i++) {
+        const z = zStart + (i / Math.max(count - 1, 1)) * (zEnd - zStart);
+        const leftWindow = createCabinWindow(-2.86, z, -1);
+        const rightWindow = createCabinWindow(2.86, z, 1);
+        parent.add(leftWindow, rightWindow);
+      }
+    }
+
+    function createDoor(x, z, name, parent) {
+      const group = new THREE.Group();
+      group.name = name;
+      group.position.set(x, 0.54, z);
+      const sideSign = Math.sign(x);
+      group.rotation.y = sideSign > 0 ? Math.PI / 2 : -Math.PI / 2;
+
+      const doorMaterial = materials.doorLine;
+      const verticalA = new THREE.Mesh(new THREE.BoxGeometry(0.04, 1.65, 0.035), doorMaterial);
+      const verticalB = verticalA.clone();
+      const top = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.04, 0.035), doorMaterial);
+      const bottom = top.clone();
+      verticalA.position.x = -0.34;
+      verticalB.position.x = 0.34;
+      top.position.y = 0.82;
+      bottom.position.y = -0.82;
+      const handle = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.035, 0.05), doorMaterial);
+      handle.position.set(0.18, 0.03, -0.01);
+      group.add(verticalA, verticalB, top, bottom, handle);
+      parent.add(group);
+    }
+
+    function createBellyLine(parent, zStart, zEnd) {
+      const length = zEnd - zStart;
+      [-1, 1].forEach((side) => {
+        const blueLine = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.08, length), materials.liveryBlue);
+        blueLine.name = "blueFuselageCheatline";
+        blueLine.position.set(side * 2.91, -0.72, zStart + length / 2);
+        const redLine = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.055, length * 0.82), materials.liveryRed);
+        redLine.name = "redFuselageCheatline";
+        redLine.position.set(side * 2.92, -0.88, zStart + length * 0.48);
+        parent.add(blueLine, redLine);
+      });
+    }
+
+    function createFuselageLivery(parent, section) {
+      if (section === "main") {
+        const leftText = createLiveryPlane("中国东方航空  CHINA EASTERN", "#1e3a8a", 7.8, 0.62);
+        leftText.position.set(-2.94, 1.25, -8.4);
+        leftText.rotation.y = -Math.PI / 2;
+        const rightText = createLiveryPlane("中国东方航空  CHINA EASTERN", "#1e3a8a", 7.8, 0.62);
+        rightText.position.set(2.94, 1.25, -8.4);
+        rightText.rotation.y = Math.PI / 2;
+        parent.add(leftText, rightText);
+      } else {
+        const regLeft = createLiveryPlane("B-303F", "#1f2937", 1.45, 0.38);
+        regLeft.position.set(-2.88, 1.16, 16.5);
+        regLeft.rotation.y = -Math.PI / 2;
+        const regRight = createLiveryPlane("B-303F", "#1f2937", 1.45, 0.38);
+        regRight.position.set(2.88, 1.16, 16.5);
+        regRight.rotation.y = Math.PI / 2;
+        parent.add(regLeft, regRight);
+      }
+    }
+
+    function createLiveryPlane(text, color, width, height) {
+      const canvas = document.createElement("canvas");
+      canvas.width = 1024;
+      canvas.height = 160;
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = color;
+      ctx.font = "bold 58px Microsoft YaHei, Arial";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      const material = new THREE.MeshBasicMaterial({
+        map: texture,
+        transparent: true,
+        depthWrite: false,
+        side: THREE.DoubleSide
+      });
+      const plane = new THREE.Mesh(new THREE.PlaneGeometry(width, height), material);
+      plane.name = "fuselageLiveryText";
+      return plane;
+    }
+
+    function createDampingPanels() {
+      const sideSize = new THREE.Vector3(0.08, 3.15, 7.8);
+      const crownSize = new THREE.Vector3(3.8, 0.08, 7.8);
+
+      const leftModule = createPanelModule({
+        name: "leftDampingPanelModule",
+        label: "左侧壁板模块",
+        size: sideSize,
+        home: new THREE.Vector3(-2.45, 0.35, 13.2),
+        exploded: new THREE.Vector3(-6.25, 0.85, 15.1),
+        rotation: new THREE.Euler(0, 0, -0.11),
+        explodedRotation: new THREE.Euler(0.1, -0.18, -0.24),
+        layerAxis: "x",
+        layerSign: -1,
+        labelOffset: new THREE.Vector3(-1.0, 2.05, 0.4)
+      });
+
+      const rightModule = createPanelModule({
+        name: "rightDampingPanelModule",
+        label: "右侧壁板模块",
+        size: sideSize,
+        home: new THREE.Vector3(2.45, 0.35, 13.2),
+        exploded: new THREE.Vector3(6.25, 0.85, 15.1),
+        rotation: new THREE.Euler(0, 0, 0.11),
+        explodedRotation: new THREE.Euler(0.1, 0.18, 0.24),
+        layerAxis: "x",
+        layerSign: 1,
+        labelOffset: new THREE.Vector3(1.0, 2.05, 0.4)
+      });
+
+      const crownModule = createPanelModule({
+        name: "crownDampingPanelModule",
+        label: "顶部壁板模块",
+        size: crownSize,
+        home: new THREE.Vector3(0, 2.45, 13.2),
+        exploded: new THREE.Vector3(0, 5.55, 15.0),
+        rotation: new THREE.Euler(0.02, 0, 0),
+        explodedRotation: new THREE.Euler(-0.16, 0, 0),
+        layerAxis: "y",
+        layerSign: 1,
+        labelOffset: new THREE.Vector3(0, 1.0, 0.35)
+      });
+
+      panelModules = [leftModule, rightModule, crownModule];
+      dampingPanels = panelModules.flatMap((module) => module.userData.layers);
+      panelModules.forEach((module) => rearFuselageGroup.add(module));
+      connectorLines = panelModules.map((module) => createConnectorLine(module));
+      connectorLines.forEach((line) => rearFuselageGroup.add(line));
+    }
+
+    function createPanelModule(config) {
+      const module = new THREE.Group();
+      module.name = config.name;
+      module.position.copy(config.home);
+      module.rotation.copy(config.rotation);
+      module.userData.home = config.home.clone();
+      module.userData.exploded = config.exploded.clone();
+      module.userData.homeRotation = config.rotation.clone();
+      module.userData.explodedRotation = config.explodedRotation.clone();
+      module.userData.layerAxis = config.layerAxis;
+      module.userData.layerSign = config.layerSign;
+      module.userData.label = config.label;
+      module.userData.layers = [];
+
+      const layerConfigs = [
+        { name: "outerAcousticFace", label: "外侧隔声面板", material: dampingPanelMaterial, offset: 0 },
+        { name: "viscoelasticCore", label: "阻尼吸能芯层", material: materials.dampingCore, offset: 0 },
+        { name: "cabinTrimLiner", label: "客舱内饰衬板", material: materials.cabinLiner, offset: 0 }
+      ];
+
+      layerConfigs.forEach((layerConfig, index) => {
+        const layer = createPanelLayer(config.size, layerConfig.material);
+        layer.name = config.name + "_" + layerConfig.name;
+        layer.userData.isDampingPanel = true;
+        layer.userData.layerLabel = layerConfig.label;
+        layer.userData.homeOffset = 0;
+        layer.userData.explodedOffset = index * 0.44 * config.layerSign;
+        module.userData.layers.push(layer);
+        module.add(layer);
+      });
+
+      const outline = new THREE.LineSegments(
+        new THREE.EdgesGeometry(new THREE.BoxGeometry(config.size.x * 1.05, config.size.y * 1.05, config.size.z * 1.02)),
+        new THREE.LineBasicMaterial({ color: 0x9ae6b4, transparent: true, opacity: 0.58 })
+      );
+      outline.name = config.name + "_outline";
+      module.userData.outline = outline;
+      module.add(outline);
+
+      const label = createTextSprite(config.label);
+      label.name = config.name + "_label";
+      label.position.copy(config.labelOffset);
+      label.material.opacity = 0;
+      module.userData.labelSprite = label;
+      module.add(label);
+
+      return module;
+    }
+
+    function createPanelLayer(size, material) {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(size.x, size.y, size.z), material);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      return mesh;
+    }
+
+    function createConnectorLine(module) {
+      const geometry = new THREE.BufferGeometry().setFromPoints([module.userData.home, module.position]);
+      const line = new THREE.Line(geometry, materials.cyanLine.clone());
+      line.name = module.name + "_explosionGuideLine";
+      line.visible = false;
+      return line;
+    }
+
+    function createAdvancedRearEffects() {
+      const scanMaterial = new THREE.MeshBasicMaterial({
+        color: 0x63b3ed,
+        transparent: true,
+        opacity: 0.16,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        side: THREE.DoubleSide
+      });
+      scanBeam = new THREE.Mesh(new THREE.BoxGeometry(5.6, 4.8, 0.045), scanMaterial);
+      scanBeam.name = "dampingPanelScanBeam";
+      scanBeam.position.set(0, 0.35, 9.2);
+      scanBeam.visible = false;
+      rearFuselageGroup.add(scanBeam);
+
+      for (let i = 0; i < 3; i++) {
+        const ringMaterial = new THREE.MeshBasicMaterial({
+          color: i === 1 ? 0x68d391 : 0x63b3ed,
+          transparent: true,
+          opacity: 0.24,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending
+        });
+        const ring = new THREE.Mesh(new THREE.TorusGeometry(2.9 + i * 0.28, 0.018, 8, 96), ringMaterial);
+        ring.name = "noiseAttenuationPulseRing";
+        ring.rotation.y = Math.PI / 2;
+        ring.position.z = 10.8 + i * 2.6;
+        ring.visible = false;
+        pulseRings.push(ring);
+        rearFuselageGroup.add(ring);
+      }
+    }
+
+    function createTextSprite(text) {
+      const canvas = document.createElement("canvas");
+      canvas.width = 512;
+      canvas.height = 160;
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "rgba(15, 23, 42, 0.78)";
+      roundRect(ctx, 18, 28, 476, 94, 18);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(99, 179, 237, 0.82)";
+      ctx.lineWidth = 3;
+      roundRect(ctx, 18, 28, 476, 94, 18);
+      ctx.stroke();
+      ctx.fillStyle = "#e2e8f0";
+      ctx.font = "bold 38px Microsoft YaHei, Arial";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, 256, 76);
+
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      const material = new THREE.SpriteMaterial({
+        map: texture,
+        transparent: true,
+        opacity: 0,
+        depthWrite: false
+      });
+      const sprite = new THREE.Sprite(material);
+      sprite.scale.set(3.2, 1.0, 1);
+      return sprite;
+    }
+
+    function createRearInternalFrame() {
+      for (let i = 0; i < 4; i++) {
+        const ring = createFrameRing(2.32, 0.06, 0.12);
+        ring.name = "rearSupportRing";
+        ring.position.z = 8.5 + i * 3;
+        rearFuselageGroup.add(ring);
+      }
+      const floor = new THREE.Mesh(new THREE.BoxGeometry(4.3, 0.12, 10.5), materials.frame);
+      floor.name = "rearCabinFloor";
+      floor.position.set(0, -1.25, 13);
+      floor.castShadow = true;
+      floor.receiveShadow = true;
+      rearFuselageGroup.add(floor);
+      [-1.85, 1.85].forEach((x) => {
+        const beam = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.13, 10.8), materials.frame);
+        beam.name = "rearSideBeam";
+        beam.position.set(x, 0.65, 13);
+        beam.castShadow = true;
+        beam.receiveShadow = true;
+        rearFuselageGroup.add(beam);
+      });
+    }
+
+    function createWingsAndTail() {
+      const leftWing = createSweptWing("leftMainWing", -1);
+      const rightWing = createSweptWing("rightMainWing", 1);
+      const leftWinglet = createWinglet("leftSharklet", -1);
+      const rightWinglet = createWinglet("rightSharklet", 1);
+      const leftEngine = createEngineAssembly("leftCFMEngine", -5.75, -2.12, -0.2);
+      const rightEngine = createEngineAssembly("rightCFMEngine", 5.75, -2.12, -0.2);
+      const leftTail = createHorizontalTail("leftHorizontalTail", -1);
+      const rightTail = createHorizontalTail("rightHorizontalTail", 1);
+      const verticalTail = createVerticalTail();
+      const leftTailLogo = createTailLogo(-1);
+      const rightTailLogo = createTailLogo(1);
+
+      wingGroup.add(
+        leftWing,
+        rightWing,
+        leftWinglet,
+        rightWinglet,
+        leftEngine,
+        rightEngine
+      );
+      rearFuselageGroup.add(
+        leftTail,
+        rightTail,
+        verticalTail,
+        leftTailLogo,
+        rightTailLogo
+      );
+    }
+
+    function createSweptWing(name, side) {
+      const shape = new THREE.Shape();
+      shape.moveTo(side * 1.75, -1.65);
+      shape.lineTo(side * 17.8, 1.05);
+      shape.lineTo(side * 16.2, 5.95);
+      shape.lineTo(side * 2.0, 3.95);
+      shape.lineTo(side * 1.75, -1.65);
+      const geometry = new THREE.ExtrudeGeometry(shape, { depth: 0.18, bevelEnabled: false });
+      geometry.rotateX(Math.PI / 2);
+      geometry.translate(0, -0.64, 0);
+      const wing = new THREE.Mesh(geometry, materials.fuselage);
+      wing.name = name;
+      wing.castShadow = true;
+      wing.receiveShadow = true;
+
+      const edge = new THREE.LineSegments(
+        new THREE.EdgesGeometry(geometry),
+        new THREE.LineBasicMaterial({ color: 0x64748b, transparent: true, opacity: 0.5 })
+      );
+      wing.add(edge);
+
+      const flapLine = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.03, 10.5), materials.doorLine);
+      flapLine.name = name + "_flapTrackLine";
+      flapLine.position.set(side * 8.2, 0.12, 3.68);
+      flapLine.rotation.y = side * 0.14;
+      wing.add(flapLine);
+
+      for (let i = 0; i < 3; i++) {
+        const fairing = new THREE.Mesh(new THREE.CapsuleGeometry(0.16, 1.35, 6, 12), materials.frame);
+        fairing.name = name + "_flapTrackFairing";
+        fairing.position.set(side * (4.5 + i * 3.0), -0.2, 4.5 + i * 0.32);
+        fairing.rotation.x = Math.PI / 2;
+        fairing.rotation.z = side * 0.08;
+        fairing.castShadow = true;
+        wing.add(fairing);
+      }
+
+      return wing;
+    }
+
+    function createWinglet(name, side) {
+      const shape = new THREE.Shape();
+      shape.moveTo(0, 0);
+      shape.lineTo(side * 0.78, 0.28);
+      shape.lineTo(side * 0.52, 2.85);
+      shape.lineTo(side * 0.08, 2.4);
+      shape.lineTo(0, 0);
+      const geometry = new THREE.ShapeGeometry(shape);
+      const winglet = new THREE.Mesh(geometry, materials.fuselage);
+      winglet.name = name;
+      winglet.position.set(side * 16.9, -0.48, 5.2);
+      winglet.rotation.y = side * 0.22;
+      winglet.rotation.z = side * -0.18;
+      winglet.castShadow = true;
+      winglet.receiveShadow = true;
+
+      const accent = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.08, 1.7), side < 0 ? materials.liveryRed : materials.liveryBlue);
+      accent.position.set(side * 0.2, 1.35, 0.04);
+      accent.rotation.z = side * -0.22;
+      winglet.add(accent);
+      return winglet;
+    }
+
+    function createEngineAssembly(name, x, y, z) {
+      const group = new THREE.Group();
+      group.name = name;
+      group.position.set(x, y, z);
+
+      const nacelle = new THREE.Mesh(new THREE.CylinderGeometry(0.92, 1.02, 2.55, 64, 1, true), materials.fuselage);
+      nacelle.name = name + "_whiteNacelle";
+      nacelle.rotation.x = Math.PI / 2;
+      nacelle.castShadow = true;
+      nacelle.receiveShadow = true;
+
+      const intakeRing = new THREE.Mesh(new THREE.TorusGeometry(1.02, 0.075, 12, 64), materials.fuselage);
+      intakeRing.name = name + "_intakeLip";
+      intakeRing.rotation.x = Math.PI / 2;
+      intakeRing.position.z = -1.28;
+
+      const innerDark = new THREE.Mesh(new THREE.CylinderGeometry(0.74, 0.74, 0.08, 48), materials.engineInterior);
+      innerDark.name = name + "_darkIntake";
+      innerDark.rotation.x = Math.PI / 2;
+      innerDark.position.z = -1.34;
+
+      const fanHub = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.13, 0.11, 24), materials.fanBlade);
+      fanHub.name = name + "_fanHub";
+      fanHub.rotation.x = Math.PI / 2;
+      fanHub.position.z = -1.41;
+      for (let i = 0; i < 14; i++) {
+        const blade = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.38, 0.025), materials.fanBlade);
+        blade.name = name + "_fanBlade";
+        blade.position.z = -1.42;
+        blade.rotation.z = (i / 14) * Math.PI * 2;
+        blade.position.x = Math.cos(blade.rotation.z) * 0.27;
+        blade.position.y = Math.sin(blade.rotation.z) * 0.27;
+        blade.rotation.z += 0.35;
+        group.add(blade);
+      }
+
+      const pylon = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.85, 1.18), materials.frame);
+      pylon.name = name + "_pylon";
+      pylon.position.set(0, 0.72, 0.35);
+      pylon.rotation.x = -0.2;
+      pylon.castShadow = true;
+
+      const blueStripe = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.08, 2.1), materials.liveryBlue);
+      blueStripe.name = name + "_blueStripe";
+      blueStripe.position.set(Math.sign(x) * 0.9, 0.05, 0);
+
+      const exhaust = new THREE.Mesh(new THREE.CylinderGeometry(0.46, 0.62, 0.82, 48, 1, true), materials.engineInterior);
+      exhaust.name = name + "_exhaustNozzle";
+      exhaust.rotation.x = Math.PI / 2;
+      exhaust.position.z = 1.56;
+      const exhaustCone = new THREE.Mesh(new THREE.ConeGeometry(0.23, 0.68, 32), materials.fanBlade);
+      exhaustCone.name = name + "_exhaustCone";
+      exhaustCone.rotation.x = -Math.PI / 2;
+      exhaustCone.position.z = 1.82;
+
+      group.add(nacelle, intakeRing, innerDark, fanHub, pylon, blueStripe, exhaust, exhaustCone);
+      return group;
+    }
+
+    function createHorizontalTail(name, side) {
+      const shape = new THREE.Shape();
+      shape.moveTo(side * 0.45, 20.9);
+      shape.lineTo(side * 7.0, 21.9);
+      shape.lineTo(side * 6.35, 24.2);
+      shape.lineTo(side * 0.8, 23.25);
+      shape.lineTo(side * 0.45, 20.9);
+      const geometry = new THREE.ExtrudeGeometry(shape, { depth: 0.14, bevelEnabled: false });
+      geometry.rotateX(Math.PI / 2);
+      geometry.translate(0, 1.05, 0);
+      const tail = new THREE.Mesh(geometry, materials.fuselage);
+      tail.name = name;
+      tail.castShadow = true;
+      tail.receiveShadow = true;
+      return tail;
+    }
+
+    function createVerticalTail() {
+      const shape = new THREE.Shape();
+      shape.moveTo(20.2, 1.25);
+      shape.lineTo(24.4, 1.25);
+      shape.lineTo(23.25, 7.45);
+      shape.lineTo(20.75, 2.35);
+      shape.lineTo(20.2, 1.25);
+      const geometry = new THREE.ExtrudeGeometry(shape, { depth: 0.22, bevelEnabled: false });
+      geometry.rotateY(Math.PI / 2);
+      geometry.translate(-0.11, 0, 0);
+      const tail = new THREE.Mesh(geometry, materials.fuselage);
+      tail.name = "verticalTailWithLivery";
+      tail.castShadow = true;
+      tail.receiveShadow = true;
+      return tail;
+    }
+
+    function createTailLogo(side) {
+      const canvas = document.createElement("canvas");
+      canvas.width = 512;
+      canvas.height = 512;
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, 512, 512);
+      ctx.fillStyle = "#e11d48";
+      ctx.beginPath();
+      ctx.moveTo(95, 260);
+      ctx.bezierCurveTo(175, 98, 322, 90, 430, 120);
+      ctx.bezierCurveTo(320, 160, 235, 230, 188, 350);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "#1d4ed8";
+      ctx.beginPath();
+      ctx.moveTo(158, 306);
+      ctx.bezierCurveTo(238, 218, 354, 210, 438, 250);
+      ctx.bezierCurveTo(332, 260, 262, 302, 210, 390);
+      ctx.closePath();
+      ctx.fill();
+
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true, depthWrite: false, side: THREE.DoubleSide });
+      const logo = new THREE.Mesh(new THREE.PlaneGeometry(2.8, 2.8), material);
+      logo.name = side < 0 ? "leftTailLiveryMark" : "rightTailLiveryMark";
+      logo.position.set(side * 0.18, 4.85, 22.35);
+      logo.rotation.y = side > 0 ? Math.PI / 2 : -Math.PI / 2;
+      return logo;
+    }
+
+    function createInternalFrame() {
+      for (let i = 0; i < 7; i++) {
+        const ring = createFrameRing(2.28, 0.06, 0.12);
+        ring.name = "mainSupportRing";
+        ring.position.z = -13 + i * 3;
+        internalFrameGroup.add(ring);
+      }
+      const floor = new THREE.Mesh(new THREE.BoxGeometry(4.35, 0.12, 23), materials.frame);
+      floor.name = "mainCabinFloor";
+      floor.position.set(0, -1.25, -4.8);
+      floor.castShadow = true;
+      floor.receiveShadow = true;
+      internalFrameGroup.add(floor);
+      [-1.9, 1.9].forEach((x) => {
+        const upperBeam = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.12, 22.5), materials.frame);
+        upperBeam.name = "mainUpperSideBeam";
+        upperBeam.position.set(x, 0.95, -4.8);
+        const lowerBeam = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.12, 22.5), materials.frame);
+        lowerBeam.name = "mainLowerSideBeam";
+        lowerBeam.position.set(x, -0.45, -4.8);
+        [upperBeam, lowerBeam].forEach((beam) => {
+          beam.castShadow = true;
+          beam.receiveShadow = true;
+          internalFrameGroup.add(beam);
+        });
+      });
+    }
+
+    function createLandingGear() {
+      createGearAssembly(0, -1.88, -16.1, landingGearGroup, "nose");
+      createGearAssembly(-1.72, -1.92, 1.8, landingGearGroup, "main");
+      createGearAssembly(1.72, -1.92, 1.8, landingGearGroup, "main");
+    }
+
+    // 补充 A320 外观识别细节：雷达罩分界、天线、航行灯、APU 排气与起落架舱门。
+    function createAircraftDetails() {
+      const detailGroup = new THREE.Group();
+      detailGroup.name = "aircraftSurfaceDetailGroup";
+
+      const seamMaterial = new THREE.MeshBasicMaterial({ color: 0x64748b, transparent: true, opacity: 0.55 });
+      const radomeSeam = new THREE.Mesh(new THREE.TorusGeometry(2.08, 0.018, 8, 96), seamMaterial);
+      radomeSeam.name = "radomeSeparationSeam";
+      radomeSeam.position.z = -17.15;
+      radomeSeam.scale.y = 0.9;
+      detailGroup.add(radomeSeam);
+
+      const antennaMaterial = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.38, metalness: 0.12, side: THREE.DoubleSide });
+      const antennaShape = new THREE.Shape();
+      antennaShape.moveTo(-0.18, 0);
+      antennaShape.lineTo(0.12, 0);
+      antennaShape.lineTo(0.02, 0.7);
+      antennaShape.lineTo(-0.18, 0);
+      [-8.5, 2.8, 14.8].forEach((z, index) => {
+        const antenna = new THREE.Mesh(new THREE.ExtrudeGeometry(antennaShape, { depth: 0.055, bevelEnabled: false }), antennaMaterial);
+        antenna.name = "vhfAntenna" + index;
+        antenna.position.set(-0.03, index === 1 ? -2.86 : 2.82, z);
+        if (index === 1) antenna.rotation.z = Math.PI;
+        detailGroup.add(antenna);
+      });
+
+      const makeLight = (name, color, position) => {
+        const material = new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 4.5, roughness: 0.2 });
+        const light = new THREE.Mesh(new THREE.SphereGeometry(0.105, 20, 12), material);
+        light.name = name;
+        light.position.copy(position);
+        detailGroup.add(light);
+      };
+      makeLight("leftRedNavigationLight", 0xff304f, new THREE.Vector3(-17.55, -0.5, 5.6));
+      makeLight("rightGreenNavigationLight", 0x22ff88, new THREE.Vector3(17.55, -0.5, 5.6));
+      makeLight("upperAntiCollisionBeacon", 0xff3b30, new THREE.Vector3(0, 2.95, -0.8));
+      makeLight("lowerAntiCollisionBeacon", 0xff3b30, new THREE.Vector3(0, -2.95, -0.8));
+
+      const apuRing = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.035, 10, 36), materials.engineInterior);
+      apuRing.name = "apuExhaustRing";
+      apuRing.position.z = 25.2;
+      detailGroup.add(apuRing);
+
+      const gearDoorMaterial = materials.fuselage.clone();
+      gearDoorMaterial.side = THREE.DoubleSide;
+      [[-0.55, -2.72, -16.0], [0.55, -2.72, -16.0], [-2.35, -2.66, 1.4], [2.35, -2.66, 1.4]].forEach((p, i) => {
+        const door = new THREE.Mesh(new THREE.BoxGeometry(i < 2 ? 0.48 : 0.72, 0.05, i < 2 ? 1.4 : 1.85), gearDoorMaterial);
+        door.name = "landingGearDoor" + i;
+        door.position.set(...p);
+        door.rotation.z = i % 2 ? -0.12 : 0.12;
+        detailGroup.add(door);
+      });
+
+      planeGroup.add(detailGroup);
+    }
+
+    function createGearAssembly(x, y, z, parent, type) {
+      const group = new THREE.Group();
+      group.name = type + "LandingGearAssembly";
+      group.position.set(x, y, z);
+
+      const strutHeight = type === "nose" ? 1.75 : 2.25;
+      const strut = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.095, strutHeight, 18), materials.gear);
+      strut.name = "landingGearStrut";
+      strut.position.y = -0.62;
+      strut.castShadow = true;
+
+      const bogie = new THREE.Mesh(new THREE.BoxGeometry(type === "nose" ? 0.72 : 1.05, 0.12, 0.16), materials.gear);
+      bogie.name = "landingGearAxle";
+      bogie.position.y = -strutHeight - 0.1;
+      bogie.castShadow = true;
+
+      const wheelOffsets = type === "nose" ? [-0.22, 0.22] : [-0.34, 0.34];
+      wheelOffsets.forEach((offset) => {
+        const wheel = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.34, 0.22, 32), materials.tire);
+        wheel.name = "landingGearWheel";
+        wheel.position.set(offset, -strutHeight - 0.12, 0);
+        wheel.rotation.z = Math.PI / 2;
+        wheel.castShadow = true;
+        wheel.receiveShadow = true;
+
+        const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 0.24, 24), materials.gear);
+        hub.name = "wheelHub";
+        hub.position.copy(wheel.position);
+        hub.rotation.z = Math.PI / 2;
+        group.add(wheel, hub);
+      });
+
+      const braceA = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 1.25, 12), materials.gear);
+      braceA.name = "landingGearDragBrace";
+      braceA.position.set(0.28, -1.15, 0.25);
+      braceA.rotation.z = 0.42;
+      braceA.rotation.x = 0.35;
+      braceA.castShadow = true;
+
+      group.add(strut, bogie, braceA);
+      parent.add(group);
+    }
+
+    function createCylinderShell(radius, length, material, z, openEnded) {
+      const geometry = new THREE.CylinderGeometry(radius, radius, length, 64, 1, openEnded);
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.rotation.x = Math.PI / 2;
+      mesh.position.z = z;
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      return mesh;
+    }
+
+    function createFrameRing(radius, tubeRadius, depth) {
+      const group = new THREE.Group();
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(radius, tubeRadius, 12, 64), materials.frame);
+      ring.rotation.y = Math.PI / 2;
+      ring.castShadow = true;
+      ring.receiveShadow = true;
+      group.add(ring);
+      const verticalBrace = new THREE.Mesh(new THREE.BoxGeometry(0.1, radius * 1.75, depth), materials.frame);
+      const horizontalBrace = new THREE.Mesh(new THREE.BoxGeometry(radius * 1.75, 0.1, depth), materials.frame);
+      verticalBrace.castShadow = true;
+      horizontalBrace.castShadow = true;
+      group.add(verticalBrace, horizontalBrace);
+      return group;
+    }
+
+    function createCabinWindow(x, z, sideSign) {
+      const windowMesh = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.28, 0.34), materials.glass);
+      windowMesh.name = "cabinWindow";
+      windowMesh.position.set(x, 1.08, z);
+      windowMesh.rotation.z = sideSign < 0 ? -0.1 : 0.1;
+
+      const frame = new THREE.Mesh(new THREE.BoxGeometry(0.052, 0.34, 0.42), new THREE.MeshStandardMaterial({
+        color: 0xe5e7eb,
+        metalness: 0.08,
+        roughness: 0.35
+      }));
+      frame.name = "cabinWindowFrame";
+      frame.position.set(x - sideSign * 0.012, 1.08, z);
+      frame.rotation.copy(windowMesh.rotation);
+      const group = new THREE.Group();
+      group.name = "cabinWindowWithFrame";
+      group.add(frame, windowMesh);
+      return group;
+    }
+
+    function initControls() {
+      controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.08;
+      controls.enablePan = true;
+      controls.enableZoom = true;
+      controls.minDistance = 5;
+      controls.maxDistance = 100;
+      controls.maxPolarAngle = Math.PI - 0.05;
+      controls.minPolarAngle = 0.05;
+      controls.target.copy(defaultTarget);
+      controls.update();
+    }
+
+    function bindEvents() {
+      window.addEventListener("resize", handleResize);
+      renderer.domElement.addEventListener("click", handleCanvasClick);
+      splitButton.addEventListener("click", async () => {
+        await animateRearFuselage(15, true);
+        await fitObjectsToView([rearFuselageGroup], "后机身结构 · AFT SECTION", 1.22);
+      });
+      resetButton.addEventListener("click", async () => {
+        if (isExploded) await animatePanelExplosion(false);
+        await animateRearFuselage(0, false);
+        await switchView(defaultCameraPosition, defaultTarget, "整体构型 · OVERVIEW");
+      });
+      explodeButton.addEventListener("click", async () => {
+        if (!isSplit) await animateRearFuselage(15, true);
+        await animatePanelExplosion(true);
+        await focusExplosionView();
+      });
+      implodeButton.addEventListener("click", () => animatePanelExplosion(false));
+      showcaseButton.addEventListener("click", runShowcase);
+      explosionViewButton.addEventListener("click", focusExplosionView);
+      overviewButton.addEventListener("click", () => switchView(new THREE.Vector3(30, 15, 40), new THREE.Vector3(0, 0, 0), "整体构型 · OVERVIEW"));
+      rearViewButton.addEventListener("click", () => switchView(new THREE.Vector3(17, 8, 31), new THREE.Vector3(0, 0.5, 14), "后机身结构 · AFT SECTION"));
+      insideViewButton.addEventListener("click", () => switchView(new THREE.Vector3(0, 0.1, 7.1), new THREE.Vector3(2.3, 0.45, 14.0), "客舱内部 · CABIN INTERIOR"));
+      orbitButton.addEventListener("click", () => {
+        isOrbiting = !isOrbiting;
+        controls.autoRotate = isOrbiting;
+        controls.autoRotateSpeed = 0.72;
+        orbitButton.textContent = isOrbiting ? "停止环绕" : "环绕巡检";
+        navStatus.textContent = isOrbiting ? "环绕巡检运行中" : "环绕巡检已停止";
+      });
+      xrayButton.addEventListener("click", toggleXray);
+      fullscreenButton.addEventListener("click", toggleFullscreen);
+      conditionSelect.addEventListener("change", updateNoiseData);
+      reductionSlider.addEventListener("input", updateNoiseData);
+      compareCheckbox.addEventListener("change", updateNoiseData);
+      updateUiState();
+    }
+
+    async function loadPerformanceData() {
+      try {
+        const response = await fetch("./data/performance.json", { cache: "no-store" });
+        if (!response.ok) throw new Error("performance data unavailable");
+        const data = await response.json();
+        if (data && data.stages) performanceData = data;
+      } catch (error) {
+        // file:// 预览或接口不可用时使用同结构的内置演示数据。
+        performanceData = fallbackPerformanceData;
+      }
+      updateFlightStage("takeoff");
+    }
+
+    function initStoryExperience() {
+      manualToggle.addEventListener("click", () => {
+        document.body.classList.toggle("manual-mode");
+        manualToggle.textContent = document.body.classList.contains("manual-mode") ? "× 关闭探索" : "◫ 手动探索";
+      });
+      autoStoryButton.addEventListener("click", runAutoStory);
+      document.querySelectorAll(".flight-tab").forEach((button) => button.addEventListener("click", () => updateFlightStage(button.dataset.stage)));
+
+      const sections = [...document.querySelectorAll(".story-section")];
+      const navItems = [...document.querySelectorAll("#navLinks a, #chapterRail a")];
+      const observer = new IntersectionObserver((entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        const id = visible.target.id;
+        navItems.forEach((item) => item.classList.toggle("active", item.getAttribute("href") === "#" + id));
+        queueStoryScene(visible.target.dataset.scene);
+      }, { threshold: [0.36, 0.58, 0.78] });
+      sections.forEach((section) => observer.observe(section));
+    }
+
+    function queueStoryScene(sceneName) {
+      if (!sceneName || sceneName === activeStoryScene) return;
+      pendingStoryScene = sceneName;
+      if (!storyTransitionRunning) runStorySceneQueue();
+    }
+
+    async function runStorySceneQueue() {
+      storyTransitionRunning = true;
+      while (pendingStoryScene) {
+        const next = pendingStoryScene;
+        pendingStoryScene = null;
+        await applyStoryScene(next);
+        activeStoryScene = next;
+      }
+      storyTransitionRunning = false;
+    }
+
+    async function applyStoryScene(sceneName) {
+      document.body.classList.toggle("data-visible", ["comparison", "flight", "performance"].includes(sceneName));
+      document.body.classList.toggle("explosion-visible", ["explosion", "principle"].includes(sceneName));
+      if (sceneName !== "contact") {
+        controls.autoRotate = false;
+        isOrbiting = false;
+        orbitButton.textContent = "环绕巡检";
+      }
+
+      if (["hero", "value", "aircraft"].includes(sceneName)) {
+        if (isExploded) await animatePanelExplosion(false);
+        if (isSplit) await animateRearFuselage(0, false);
+        const views = {
+          hero: [new THREE.Vector3(29, 12, 42), new THREE.Vector3(0, 0, 0), "整机数字孪生 · AIRCRAFT"],
+          value: [new THREE.Vector3(-31, 10, 30), new THREE.Vector3(0, 0, 0), "能量管理系统 · METAMATERIAL"],
+          aircraft: [new THREE.Vector3(27, 9, 35), new THREE.Vector3(0, 0, 1), "A320 级应用场景 · NARROW BODY"]
+        };
+        await switchView(...views[sceneName]);
+      } else if (sceneName === "installation") {
+        if (!isSplit) await animateRearFuselage(15, true);
+        await fitObjectsToView([rearFuselageGroup], "安装区域 · AFT CABIN", 1.26);
+      } else if (sceneName === "explosion") {
+        if (!isSplit) await animateRearFuselage(15, true);
+        if (!isExploded) await animatePanelExplosion(true);
+        await focusExplosionView();
+      } else if (sceneName === "principle") {
+        if (!isSplit) await animateRearFuselage(15, true);
+        if (!isExploded) await animatePanelExplosion(true);
+        await switchView(new THREE.Vector3(14, 7, 38), new THREE.Vector3(0, .6, 29), "振动能量路径 · ENERGY FLOW");
+      } else if (sceneName === "comparison") {
+        await switchView(new THREE.Vector3(-24, 8, 34), new THREE.Vector3(0, 0, 8), "同步激励实验 · A/B LAB");
+      } else if (sceneName === "flight") {
+        if (isExploded) await animatePanelExplosion(false);
+        if (isSplit) await animateRearFuselage(0, false);
+        await switchView(new THREE.Vector3(25, 7, 33), new THREE.Vector3(0, 0, 0), "飞行包线 · FLIGHT ENVELOPE");
+      } else if (sceneName === "performance") {
+        await switchView(new THREE.Vector3(18, 5, 30), new THREE.Vector3(0, 0, 6), "工程指标 · PERFORMANCE");
+      } else if (sceneName === "contact") {
+        await switchView(new THREE.Vector3(31, 13, 39), new THREE.Vector3(0, 0, 0), "合作与验证 · CO-CREATION");
+        controls.autoRotate = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        controls.autoRotateSpeed = 0.42;
+      }
+    }
+
+    async function runAutoStory() {
+      if (autoStoryRunning) return;
+      autoStoryRunning = true;
+      autoStoryButton.textContent = "自动演示中…";
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const sectionIds = ["aircraft", "installation", "explosion", "principle", "comparison", "flight", "performance", "contact"];
+      for (const id of sectionIds) {
+        if (!autoStoryRunning) break;
+        document.getElementById(id).scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
+        await delay(reduced ? 900 : 2600);
+      }
+      autoStoryRunning = false;
+      autoStoryButton.textContent = "▶ 自动演示";
+    }
+
+    function updateFlightStage(stageName) {
+      const stage = performanceData.stages[stageName] || fallbackPerformanceData.stages.takeoff;
+      document.querySelectorAll(".flight-tab").forEach((button) => button.classList.toggle("active", button.dataset.stage === stageName));
+      document.getElementById("flightNormal").textContent = stage.normalAmplitude.toFixed(2) + " g";
+      document.getElementById("flightMeta").textContent = stage.metaAmplitude.toFixed(2) + " g";
+      document.getElementById("flightNoise").textContent = stage.cabinNoise + " dB";
+      document.getElementById("flightReduction").textContent = stage.reduction + "%";
+      document.getElementById("normalCompareValue").textContent = stage.normalAmplitude.toFixed(2) + " g";
+      document.getElementById("metaCompareValue").textContent = stage.metaAmplitude.toFixed(2) + " g";
+      drawNoiseChart(stage.externalNoise, stage.cabinNoise);
+      const attitudes = { takeoff: -0.07, cruise: 0, descent: 0.045, landing: -0.025 };
+      new Tween(planeGroup.rotation).to({ x: attitudes[stageName] || 0 }, 900).easing(Easing.Quadratic.InOut).start();
+    }
+
+    // 后段机身拆分与复位动画
+    function animateRearFuselage(targetZ, splitState) {
+      if (isAnimating) return Promise.resolve();
+      isAnimating = true;
+      navStatus.textContent = splitState ? "后机身拆分中" : "后机身复位中";
+      updateUiState();
+      return new Promise((resolve) => {
+        new Tween(rearFuselageGroup.position)
+          .to({ z: targetZ }, 1500)
+          .easing(Easing.Quadratic.InOut)
+          .onComplete(() => {
+            isSplit = splitState;
+            if (!splitState) isExploded = false;
+            isAnimating = false;
+            navStatus.textContent = splitState ? "后机身已拆分" : "系统待命";
+            updateUiState();
+            resolve();
+          })
+          .start();
+      });
+    }
+
+    function animatePanelExplosion(explodeState) {
+      if (isAnimating || (!isSplit && explodeState)) return Promise.resolve();
+      isAnimating = true;
+      navStatus.textContent = explodeState ? "壁板爆炸图展开中" : "壁板模块收拢中";
+      updateUiState();
+
+      const tweens = [];
+      panelModules.forEach((module) => {
+        const targetPosition = explodeState ? module.userData.exploded : module.userData.home;
+        const targetRotation = explodeState ? module.userData.explodedRotation : module.userData.homeRotation;
+
+        tweens.push(new Tween(module.position)
+          .to({ x: targetPosition.x, y: targetPosition.y, z: targetPosition.z }, 1250)
+          .easing(Easing.Quadratic.InOut)
+          .start());
+
+        tweens.push(new Tween(module.rotation)
+          .to({ x: targetRotation.x, y: targetRotation.y, z: targetRotation.z }, 1250)
+          .easing(Easing.Quadratic.InOut)
+          .start());
+
+        module.userData.layers.forEach((layer) => {
+          const targetOffset = explodeState ? layer.userData.explodedOffset : layer.userData.homeOffset;
+          const axis = module.userData.layerAxis;
+          const target = { x: layer.position.x, y: layer.position.y, z: layer.position.z };
+          target[axis] = targetOffset;
+          tweens.push(new Tween(layer.position)
+            .to(target, 1000)
+            .delay(explodeState ? 260 : 0)
+            .easing(Easing.Quadratic.InOut)
+            .start());
+        });
+
+        if (module.userData.labelSprite) {
+          tweens.push(new Tween(module.userData.labelSprite.material)
+            .to({ opacity: explodeState ? 1 : 0 }, 650)
+            .delay(explodeState ? 500 : 0)
+            .easing(Easing.Quadratic.InOut)
+            .start());
+        }
+      });
+
+      return new Promise((resolve) => {
+        new Tween({ t: 0 })
+          .to({ t: 1 }, 1500)
+          .easing(Easing.Quadratic.InOut)
+          .onComplete(() => {
+            isExploded = explodeState;
+            isAnimating = false;
+            navStatus.textContent = explodeState ? "壁板爆炸图已展开" : "壁板模块已收拢";
+            materialInfo.innerHTML = explodeState
+              ? [
+                  "爆炸图状态：三层减震壁板已展开",
+                  "外侧隔声面板：#63b3ed，半透明",
+                  "阻尼吸能芯层：#f6ad55，吸收振动能量",
+                  "客舱内饰衬板：#c4f1f9，面向客舱",
+                  "当前降噪系数：" + reductionSlider.value + " dB"
+                ].join("<br>")
+              : "拆分后点击淡蓝色减震壁板，可查看材料基础参数。";
+            updateUiState();
+            resolve();
+          })
+          .start();
+      });
+    }
+
+    function updateUiState() {
+      const busy = isAnimating || isShowcaseRunning;
+      splitButton.disabled = busy || isSplit;
+      resetButton.disabled = busy || !isSplit;
+      explodeButton.disabled = busy || isExploded;
+      implodeButton.disabled = busy || !isExploded;
+      showcaseButton.disabled = busy;
+      explosionViewButton.disabled = busy || !isSplit;
+      overviewButton.disabled = busy;
+      rearViewButton.disabled = busy;
+      insideViewButton.disabled = busy;
+      orbitButton.disabled = busy;
+      xrayButton.disabled = busy;
+      splitStateText.textContent = isSplit ? "已拆分" : "未拆分";
+      panelStateText.textContent = isExploded ? "爆炸展开" : "收拢";
+      connectorLines.forEach((line) => {
+        line.visible = isSplit && (isExploded || isAnimating);
+      });
+      if (scanBeam) scanBeam.visible = isSplit;
+      pulseRings.forEach((ring) => {
+        ring.visible = isSplit;
+      });
+    }
+
+    function delay(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    // 根据对象的实际三维包围盒自动计算相机距离，保证不同屏幕比例下完整入镜。
+    function fitObjectsToView(objects, label, padding = 1.28, horizontalBias = 0) {
+      const box = new THREE.Box3();
+      objects.forEach((object) => box.expandByObject(object, true));
+      if (box.isEmpty()) return Promise.resolve();
+      const center = box.getCenter(new THREE.Vector3());
+      const size = box.getSize(new THREE.Vector3());
+      const verticalFov = THREE.MathUtils.degToRad(camera.fov);
+      const horizontalFov = 2 * Math.atan(Math.tan(verticalFov / 2) * camera.aspect);
+      const distanceForHeight = size.y / (2 * Math.tan(verticalFov / 2));
+      const distanceForWidth = size.x / (2 * Math.tan(horizontalFov / 2));
+      const distance = Math.max(distanceForHeight, distanceForWidth, size.z * 0.72) * padding;
+      const viewCenter = center.clone().add(new THREE.Vector3(-size.x * horizontalBias, 0, 0));
+      const direction = new THREE.Vector3(1.05, 0.58, 1.2).normalize();
+      return switchView(viewCenter.clone().add(direction.multiplyScalar(distance)), viewCenter, label);
+    }
+
+    function focusExplosionView() {
+      if (!isSplit || isAnimating) return Promise.resolve();
+      return fitObjectsToView([rearFuselageGroup], "壁板爆炸全景 · EXPLODED ASSEMBLY", 1.6, 0.3);
+    }
+
+    function toggleXray() {
+      isXray = !isXray;
+      const rearSkin = rearFuselageGroup.getObjectByName("rearOuterSkin");
+      if (rearSkin) rearSkin.material.opacity = isXray ? 0.12 : 0.38;
+      internalFrameGroup.visible = true;
+      xrayButton.textContent = isXray ? "关闭透视" : "机身透视";
+      navStatus.textContent = isXray ? "结构透视已开启" : "结构透视已关闭";
+      viewBadge.textContent = isXray ? "机身透视 · STRUCTURAL X-RAY" : (isExploded ? "壁板爆炸全景 · EXPLODED ASSEMBLY" : "整体构型 · OVERVIEW");
+    }
+
+    async function toggleFullscreen() {
+      try {
+        if (!document.fullscreenElement) {
+          await document.documentElement.requestFullscreen();
+          document.body.classList.add("presentation");
+          fullscreenButton.textContent = "退出全屏";
+        } else {
+          await document.exitFullscreen();
+        }
+      } catch (error) {
+        navStatus.textContent = "浏览器未允许全屏";
+      }
+    }
+
+    document.addEventListener("fullscreenchange", () => {
+      if (!document.fullscreenElement) {
+        document.body.classList.remove("presentation");
+        fullscreenButton.textContent = "全屏演示";
+      }
+      handleResize();
+    });
+
+    // 平滑视角切换
+    function switchView(cameraTargetPosition, orbitTargetPosition, label) {
+      if (isAnimating && !isShowcaseRunning) return Promise.resolve();
+      const cameraStart = camera.position.clone();
+      const targetStart = controls.target.clone();
+      const transition = { t: 0 };
+      return new Promise((resolve) => {
+        new Tween(transition)
+          .to({ t: 1 }, 1200)
+          .easing(Easing.Quadratic.InOut)
+          .onUpdate(() => {
+            camera.position.lerpVectors(cameraStart, cameraTargetPosition, transition.t);
+            controls.target.lerpVectors(targetStart, orbitTargetPosition, transition.t);
+            camera.lookAt(controls.target);
+            controls.update();
+          })
+          .onComplete(() => {
+            if (label) viewBadge.textContent = label;
+            resolve();
+          })
+          .start();
+      });
+    }
+
+    async function runShowcase() {
+      if (isAnimating || isShowcaseRunning) return;
+      isShowcaseRunning = true;
+      navStatus.textContent = "自动演示运行中";
+      updateUiState();
+      try {
+        await switchView(new THREE.Vector3(30, 15, 40), new THREE.Vector3(0, 0, 0));
+        if (!isSplit) await animateRearFuselage(15, true);
+        await delay(250);
+        await switchView(new THREE.Vector3(15, 7, 28), new THREE.Vector3(0, 0.5, 14));
+        await animatePanelExplosion(true);
+        await focusExplosionView();
+        flashDampingPanel();
+        await delay(1100);
+        await switchView(new THREE.Vector3(0, 0.2, 22.1), new THREE.Vector3(2.3, 0.5, 29.2), "客舱内部 · CABIN INTERIOR");
+      } finally {
+        isShowcaseRunning = false;
+        navStatus.textContent = "自动演示完成";
+        updateUiState();
+      }
+    }
+
+    // 拆分状态下点击减震壁板，高亮并更新材料参数
+    function handleCanvasClick(event) {
+      if (!isSplit || isAnimating) return;
+      const rect = renderer.domElement.getBoundingClientRect();
+      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(pointer, camera);
+      const intersects = raycaster.intersectObjects(dampingPanels, false);
+      if (!intersects.length) return;
+      const clickedLayer = intersects[0].object;
+      flashDampingPanel();
+      materialInfo.innerHTML = [
+        "选中层级：" + (clickedLayer.userData.layerLabel || "复合减震壁板"),
+        "材料类型：三层复合减震壁板模块",
+        "外层：隔声面板 #63b3ed",
+        "芯层：阻尼吸能材料 #f6ad55",
+        "内层：客舱内饰衬板 #c4f1f9",
+        "当前降噪系数：" + reductionSlider.value + " dB",
+        "状态：" + (isExploded ? "爆炸图展开" : "收拢贴合")
+      ].join("<br>");
+    }
+
+    function flashDampingPanel() {
+      const flashState = { intensity: 0 };
+      const upTween = new Tween(flashState)
+        .to({ intensity: 1 }, 220)
+        .easing(Easing.Quadratic.Out)
+        .onUpdate(() => {
+          dampingPanelMaterial.color.lerpColors(originalPanelColor, new THREE.Color(0xffffff), flashState.intensity);
+          dampingPanelMaterial.opacity = originalPanelOpacity + flashState.intensity * 0.22;
+          dampingPanelMaterial.emissiveIntensity = 0.2 + flashState.intensity * 1.2;
+        });
+      const downTween = new Tween(flashState)
+        .to({ intensity: 0 }, 360)
+        .easing(Easing.Quadratic.In)
+        .onUpdate(() => {
+          dampingPanelMaterial.color.lerpColors(originalPanelColor, new THREE.Color(0xffffff), flashState.intensity);
+          dampingPanelMaterial.opacity = originalPanelOpacity + flashState.intensity * 0.22;
+          dampingPanelMaterial.emissiveIntensity = 0.2 + flashState.intensity * 1.2;
+        })
+        .onComplete(() => {
+          dampingPanelMaterial.color.copy(originalPanelColor);
+          dampingPanelMaterial.opacity = originalPanelOpacity;
+          dampingPanelMaterial.emissiveIntensity = 0.2;
+        });
+      upTween.chain(downTween).start();
+    }
+
+    // 噪音数据实时联动
+    function updateNoiseData() {
+      const externalNoise = Number(conditionSelect.value);
+      const reduction = Number(reductionSlider.value);
+      const internalNoise = externalNoise - reduction;
+      reductionLabel.textContent = reduction + " dB";
+      externalNoiseValue.textContent = externalNoise + " dB";
+      internalNoiseValue.textContent = internalNoise + " dB";
+      differenceValue.textContent = reduction + " dB";
+      noDampingValue.textContent = externalNoise + " dB";
+      noDampingMetric.style.display = compareCheckbox.checked ? "block" : "none";
+      drawNoiseChart(externalNoise, internalNoise);
+    }
+
+    function drawNoiseChart(externalNoise, internalNoise) {
+      const ctx = chartContext;
+      const width = chartCanvas.width;
+      const height = chartCanvas.height;
+      const paddingLeft = 48;
+      const paddingRight = 24;
+      const paddingTop = 28;
+      const paddingBottom = 56;
+      const chartWidth = width - paddingLeft - paddingRight;
+      const chartHeight = height - paddingTop - paddingBottom;
+      const maxValue = 120;
+      ctx.clearRect(0, 0, width, height);
+      const gradientBackground = ctx.createLinearGradient(0, 0, 0, height);
+      gradientBackground.addColorStop(0, "rgba(30, 41, 59, 0.92)");
+      gradientBackground.addColorStop(1, "rgba(15, 23, 42, 0.92)");
+      ctx.fillStyle = gradientBackground;
+      ctx.fillRect(0, 0, width, height);
+      ctx.strokeStyle = "rgba(148, 163, 184, 0.22)";
+      ctx.lineWidth = 1;
+      ctx.font = "22px Microsoft YaHei, Arial";
+      ctx.fillStyle = "rgba(203, 213, 224, 0.88)";
+      for (let i = 0; i <= 4; i++) {
+        const value = i * 30;
+        const y = paddingTop + chartHeight - (value / maxValue) * chartHeight;
+        ctx.beginPath();
+        ctx.moveTo(paddingLeft, y);
+        ctx.lineTo(width - paddingRight, y);
+        ctx.stroke();
+        ctx.fillText(value, 10, y + 7);
+      }
+      ctx.strokeStyle = "rgba(226, 232, 240, 0.5)";
+      ctx.beginPath();
+      ctx.moveTo(paddingLeft, paddingTop);
+      ctx.lineTo(paddingLeft, paddingTop + chartHeight);
+      ctx.lineTo(width - paddingRight, paddingTop + chartHeight);
+      ctx.stroke();
+      const bars = [
+        { label: "无减震壁板", value: externalNoise, colorTop: "#f87171", colorBottom: "#991b1b" },
+        { label: "有减震壁板", value: internalNoise, colorTop: "#68d391", colorBottom: "#047857" }
+      ];
+      const barWidth = 92;
+      const gap = 92;
+      const startX = paddingLeft + (chartWidth - barWidth * 2 - gap) / 2;
+      bars.forEach((bar, index) => {
+        const x = startX + index * (barWidth + gap);
+        const barHeight = (bar.value / maxValue) * chartHeight;
+        const y = paddingTop + chartHeight - barHeight;
+        const gradient = ctx.createLinearGradient(0, y, 0, paddingTop + chartHeight);
+        gradient.addColorStop(0, bar.colorTop);
+        gradient.addColorStop(1, bar.colorBottom);
+        ctx.fillStyle = gradient;
+        roundRect(ctx, x, y, barWidth, barHeight, 8);
+        ctx.fill();
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 24px Microsoft YaHei, Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(bar.value + "dB", x + barWidth / 2, y - 10);
+        ctx.fillStyle = "rgba(226, 232, 240, 0.9)";
+        ctx.font = "20px Microsoft YaHei, Arial";
+        ctx.fillText(bar.label, x + barWidth / 2, height - 20);
+      });
+      ctx.textAlign = "left";
+    }
+
+    function roundRect(ctx, x, y, width, height, radius) {
+      const safeRadius = Math.min(radius, width / 2, height / 2);
+      ctx.beginPath();
+      ctx.moveTo(x + safeRadius, y);
+      ctx.lineTo(x + width - safeRadius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + safeRadius);
+      ctx.lineTo(x + width, y + height - safeRadius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - safeRadius, y + height);
+      ctx.lineTo(x + safeRadius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - safeRadius);
+      ctx.lineTo(x, y + safeRadius);
+      ctx.quadraticCurveTo(x, y, x + safeRadius, y);
+      ctx.closePath();
+    }
+
+    function handleResize() {
+      const width = sceneContainer.clientWidth;
+      const height = sceneContainer.clientHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    }
+
+    function updateConnectorLines() {
+      connectorLines.forEach((line, index) => {
+        const module = panelModules[index];
+        if (!module) return;
+        const points = [module.userData.home, module.position.clone()];
+        line.geometry.setFromPoints(points);
+        line.material.opacity = isExploded ? 0.78 : 0.28;
+      });
+    }
+
+    function updateAdvancedSceneEffects(elapsed) {
+      if (scanBeam) {
+        scanBeam.position.z = 9.0 + ((elapsed * 1.4) % 8.4);
+        scanBeam.material.opacity = isSplit ? 0.12 + Math.sin(elapsed * 3.2) * 0.04 : 0;
+      }
+
+      pulseRings.forEach((ring, index) => {
+        const pulse = (Math.sin(elapsed * 2.1 + index * 1.7) + 1) / 2;
+        const scale = 1 + pulse * 0.24;
+        ring.scale.set(scale, scale, scale);
+        ring.material.opacity = isSplit ? 0.1 + pulse * 0.22 : 0;
+      });
+
+      panelModules.forEach((module, index) => {
+        if (!module.userData.outline) return;
+        const pulse = (Math.sin(elapsed * 2.8 + index) + 1) / 2;
+        module.userData.outline.material.opacity = isSplit ? 0.35 + pulse * 0.28 : 0.15;
+      });
+
+      ["upperAntiCollisionBeacon", "lowerAntiCollisionBeacon"].forEach((name, index) => {
+        const beacon = planeGroup.getObjectByName(name);
+        if (beacon) beacon.material.emissiveIntensity = Math.sin(elapsed * 4.4 + index * 0.4) > 0.72 ? 7 : 0.8;
+      });
+    }
+
+    function drawEnergyFlow(elapsed) {
+      if (!energyCanvas || !energyContext) return;
+      const ctx = energyContext;
+      const width = energyCanvas.width;
+      const height = energyCanvas.height;
+      ctx.clearRect(0, 0, width, height);
+      const bg = ctx.createLinearGradient(0, 0, width, 0);
+      bg.addColorStop(0, "rgba(64,20,8,.55)");
+      bg.addColorStop(.48, "rgba(24,33,48,.42)");
+      bg.addColorStop(1, "rgba(3,44,58,.55)");
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, width, height);
+      ctx.strokeStyle = "rgba(148,163,184,.13)";
+      for (let x = 0; x <= width; x += 45) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke(); }
+      for (let y = 0; y <= height; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke(); }
+
+      const mid = height / 2;
+      for (let track = 0; track < 3; track++) {
+        ctx.beginPath();
+        for (let x = 0; x < width; x += 4) {
+          const decay = x < width * .42 ? 1 : Math.exp(-(x - width * .42) / 135);
+          const amplitude = (46 - track * 11) * decay;
+          const y = mid + (track - 1) * 56 + Math.sin(x * .052 - elapsed * (5.2 + track)) * amplitude;
+          if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        const gradient = ctx.createLinearGradient(0, 0, width, 0);
+        gradient.addColorStop(0, "#fb923c"); gradient.addColorStop(.48, "#facc15"); gradient.addColorStop(1, "#22d3ee");
+        ctx.strokeStyle = gradient; ctx.lineWidth = 3 - track * .45; ctx.stroke();
+      }
+      ctx.fillStyle = "rgba(251,146,60,.9)"; ctx.font = "bold 22px sans-serif"; ctx.fillText("输入激励", 24, 32);
+      ctx.fillStyle = "rgba(34,211,238,.9)"; ctx.fillText("衰减输出", width - 126, 32);
+      ctx.fillStyle = "rgba(226,232,240,.66)"; ctx.fillText("局域共振 / 阻尼耗能区", width * .41, height - 24);
+    }
+
+    function animate(time) {
+      requestAnimationFrame(animate);
+      updateTween(time);
+      const elapsed = sceneClock ? sceneClock.getElapsedTime() : 0;
+      updateConnectorLines();
+      updateAdvancedSceneEffects(elapsed);
+      drawEnergyFlow(elapsed);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+  </script>
+</body>
+</html>
